@@ -7,23 +7,22 @@
 
 ## Estrutura de Pastas
 vsrealprojpessoal/
-│
 ├── config/                
-│   └── database.js
+     └── database.js
 ├── controllers/           
-│   └── HomeController.js
+     └── HomeController.js
 ├── models/              
-│   └── User.js
+     └── User.js
 ├── routes/                
-│   └── index.js
+     └── index.js
 ├── services/              
-│   └── userService.js
+     └── userService.js
 ├── assets/                
 ├── scripts/               
 ├── styles/                
 ├── tests/                 
-│   └── .env.example
-|   └── example.test.js
+     └── .env.example
+     └── example.test.js
 ├── .env
 ├── .gitignore             
 ├── jest.config.js        
