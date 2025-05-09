@@ -23,7 +23,7 @@ O sistema proposto consiste em uma aplicação web para gerenciamento de tarefas
 
 ### 3.1. Modelagem do banco de dados  (Semana 3)
 Modelo relacional
-![modelo relacional](./assets/modelorelacional.png)
+![Modelo Relacional](./assets/modelorelacional.png)
 
 Modelo Físico
 ```SQL
