@@ -32,7 +32,8 @@ vsrealprojpessoal/
 ├── readme.md              
 ├── server.js 
 ├── package.jspm
-└── rest.http         
+└── rest.http 
+        
 
 ## Como executar o projeto localmente
 1. Clone o repositório:
