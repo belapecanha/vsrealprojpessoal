@@ -24,14 +24,15 @@ vsrealprojpessoal/
      └── .env.example
      └── example.test.js
 ├── .env
-├── .gitignore             
-├── jest.config.js        
-├── package-lock.json      
-├── package.json          
-├── readme.md              
+├── .gitignore           
+├── jest.config.js       
+├── package-lock.json    
+├── package.json
+├── readme.md  
 ├── server.js 
 ├── package.jspm
-└── rest.http 
+└── rest.http
+
         
 
 ## Como executar o projeto localmente
