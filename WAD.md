@@ -49,9 +49,6 @@ CREATE TABLE projects (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
-
-
 -- Teams Table
 CREATE TABLE teams (
   id SERIAL PRIMARY KEY,

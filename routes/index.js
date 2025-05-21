@@ -1,10 +1,14 @@
+// routes/index.js
 const express = require('express');
 const router = express.Router();
+const TarefaController = require('../controllers/TarefaController');
 
-// Rota de teste
-router.get('/', (req, res) => {
-  res.send('Online');
-});
+// Rotas para o CRUD de tarefas
+router.post('/tarefas', TarefaController.criarTarefa);
+router.get('/tarefas', TarefaController.listarTarefas);
+router.put('/tarefas/:id', TarefaController.editarTarefa);
+router.delete('/tarefas/:id', TarefaController.excluirTarefa);
 
 module.exports = router;
-//.
+
+module.exports = router;
