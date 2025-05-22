@@ -3,10 +3,10 @@ const pool = require('../config/database');
 
 // Criar uma nova tarefa
 exports.criarTarefa = async (req, res) => {
-  const { nome, descricao } = req.body;
+  const { title_tasks, description_tasks } = req.body;
 
-  const query = 'INSERT INTO tarefas (nome, descricao) VALUES ($1, $2) RETURNING *';
-  const values = [nome, descricao];
+  const query = 'INSERT INTO tasks (title_tasks, description_tasks) VALUES ($1, $2) RETURNING *';
+  const values = [title_tasks, description_tasks];
 
   try {
     const result = await pool.query(query, values);
@@ -19,7 +19,7 @@ exports.criarTarefa = async (req, res) => {
 
 // Listar todas as tarefas
 exports.listarTarefas = async (req, res) => {
-  const query = 'SELECT * FROM tarefas';
+  const query = 'SELECT * FROM tasks';
 
   try {
     const result = await pool.query(query);
@@ -32,12 +32,12 @@ exports.listarTarefas = async (req, res) => {
 // Editar uma tarefa
 exports.editarTarefa = async (req, res) => {
   const { id } = req.params;
-  const { nome, descricao, status } = req.body;
+  const { title_tasks, description_tasks, status } = req.body;
 
   const query = `
-    UPDATE tarefas SET nome = $1, descricao = $2, status = $3, updated_at = CURRENT_TIMESTAMP
+    UPDATE tasks SET title_tasks = $1, description_tasks = $2, status = $3, updated_at = CURRENT_TIMESTAMP
     WHERE id = $4 RETURNING *`;
-  const values = [nome, descricao, status, id];
+  const values = [title_tasks, description_tasks, status, id];
 
   try {
     const result = await pool.query(query, values);
@@ -54,7 +54,7 @@ exports.editarTarefa = async (req, res) => {
 exports.excluirTarefa = async (req, res) => {
   const { id } = req.params;
 
-  const query = 'DELETE FROM tarefas WHERE id = $1 RETURNING *';
+  const query = 'DELETE FROM tasks WHERE id = $1 RETURNING *';
   const values = [id];
 
   try {

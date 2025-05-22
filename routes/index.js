@@ -10,5 +10,4 @@ router.put('/tarefas/:id', TarefaController.editarTarefa);
 router.delete('/tarefas/:id', TarefaController.excluirTarefa);
 
 module.exports = router;
-
-module.exports = router;
+  
