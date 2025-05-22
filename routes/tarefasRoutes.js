@@ -1,27 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const TarefaController = require('../controllers/TarefaController');
-const pool = require('../config/database'); // Corrigindo o caminho do banco de dados
+const pool = require('../config/database'); 
 
 // Listar tarefas e renderizar a página
-router.get('/tarefas', async (req, res) => {
-  try {
-    //tem que estar no controller
-    res.send({ tarefas: result.rows });
-  } catch (err) {
-    console.error('Erro ao listar tarefas:', err);
-    res.status(500).send(err.message);
-  }
-  //fim do controller
-});
+router.get('/tarefas', TarefaController.listarTarefas);
 
 // Criar tarefa
-router.post('/tarefas', TarefaController.criarTarefa);
+router.post('/tarefas/criar', TarefaController.criarTarefa);
 
 // Editar tarefa
 router.post('/tarefas/edit/:id', TarefaController.editarTarefa);
 
-// "Excluir" tarefa (exclusão lógica)
+// "Excluir" tarefa 
 router.post('/tarefas/delete/:id', TarefaController.excluirTarefa);
 
 module.exports = router;

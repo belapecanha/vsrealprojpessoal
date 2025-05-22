@@ -2,23 +2,23 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const tarefasRoutes = require('./routes/tarefasRoutes');
+const usuarioRoutes = require('./routes/usuarioRoutes');
+const projetosRoutes = require('./routes/projetosRoutes');
 
 const app = express();
 const PORT = 3000;
 
-// Middleware para processar JSON
+// Middleware
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 
-// Rotas
-const routes = require('./routes/tarefasRoutes');
-app.use('/', routes);
+// Routes
+app.use('/api', tarefasRoutes);
+app.use('/api', usuarioRoutes);
+app.use('/api', projetosRoutes);
 
-// Usando as rotas definidas
-app.use('/api', routes);
-
-// Inicializa o servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });

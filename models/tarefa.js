@@ -1,35 +1,42 @@
-const db = require('../config/db');
+const pool = require('../config/database');
 
-module.exports = {
+class TarefaModel {
   // Listar todos as tasks
-  async findAll() {
-    const result = await pool.query(`
-        SELECT * FROM tasks
-        WHERE is_deleted = FALSE
-        ORDER BY created_at DESC
-        `);    return result.rows;
-    },
+  static async findAll() {
+    const query = `
+      SELECT * FROM tasks 
+      WHERE is_deleted = FALSE 
+      ORDER BY created_at DESC
+    `;
+    const result = await pool.query(query);
+    return result.rows;
+  }
 
   // Criar uma nova task
-  async create(title_tasks, description_tasks) {
-    const result = await db.query(
-      'INSERT INTO tasks (title_tasks, description_tasks) VALUES ($1, $2) RETURNING *',
-      [title_tasks, description_tasks]
-    );
+  static async create(data) {
+    const { title_tasks, description_tasks, status, priority } = data;
+    const query = `
+      INSERT INTO tasks (title_tasks, description_tasks, status, priority)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *
+    `;
+    const result = await pool.query(query, [title_tasks, description_tasks, status, priority]);
     return result.rows[0];
-  },
-
-  // Atualizar um professor existente
-  async update(id, nome, email) {
-    const result = await db.query(
-      'UPDATE professor SET nome = $1, email = $2 WHERE id = $3 RETURNING *',
-      [nome, email, id]
-    );
-    return result.rows[0];
-  },
-
-  // Deletar um professor
-  async delete(id) {
-    await db.query('DELETE FROM professor WHERE id = $1', [id]);
   }
-};
+
+  // Atualizar uma task existente
+  static async update(title_tasks, description_tasks, status, priority ) {
+    const result = await db.query(
+      'UPDATE tasks SET title_tasks = $1, description_tasks = $2, status = $3, priority = $4 WHERE id = $5 RETURNING *',
+      [title_tasks, description_tasks, status, priority, id]
+    );
+    return result.rows[0];
+  }
+
+  // Deletar uma task
+  static async delete(id) {
+    await db.query('DELETE FROM task WHERE id = $1', [id]);
+  }
+}
+
+module.exports = TarefaModel;

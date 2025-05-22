@@ -1,5 +1,5 @@
-// controllers/TarefaController.js
 const pool = require('../config/database');
+const TarefaModel = require('../models/tarefa');
 
 exports.criarTarefa = async (req, res) => {
   const { title_tasks, description_tasks, status = 'Pendente', priority = 'Média' } = req.body;
@@ -19,17 +19,11 @@ exports.criarTarefa = async (req, res) => {
   }
 };
 
-
 // Listar todas as tarefas
 exports.listarTarefas = async (req, res) => {
-  const query = `
-      SELECT * FROM tasks
-      WHERE is_deleted = FALSE
-      ORDER BY created_at DESC
-    `;
   try {
-    const result = await pool.query(query);
-    res.status(200).json(result.rows);
+    const tarefas = await TarefaModel.findAll();
+    res.status(200).json(tarefas);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -41,7 +35,7 @@ exports.editarTarefa = async (req, res) => {
   const { title_tasks, description_tasks, status, priority } = req.body;
 
   const query = `
-    UPDATE tasks
+    UPDATE tasks 
     SET title_tasks = $1,
         description_tasks = $2,
         status = $3,
@@ -49,7 +43,7 @@ exports.editarTarefa = async (req, res) => {
         updated_at = CURRENT_TIMESTAMP
     WHERE id = $5
     RETURNING *`;
-  const values = [title_tasks, description_tasks, status, priority,id];
+  const values = [title_tasks, description_tasks, status, priority, id];
 
   try {
     const result = await pool.query(query, values);
