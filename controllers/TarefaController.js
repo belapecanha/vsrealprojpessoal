@@ -1,12 +1,14 @@
 // controllers/TarefaController.js
 const pool = require('../config/database');
 
-// Criar uma nova tarefa
 exports.criarTarefa = async (req, res) => {
-  const { title_tasks, description_tasks } = req.body;
+  const { title_tasks, description_tasks, status = 'Pendente', priority = 'Média' } = req.body;
 
-  const query = 'INSERT INTO tasks (title_tasks, description_tasks) VALUES ($1, $2) RETURNING *';
-  const values = [title_tasks, description_tasks];
+  const query = `
+    INSERT INTO tasks (title_tasks, description_tasks, status, priority)
+    VALUES ($1, $2, $3, $4)
+    RETURNING *`;
+  const values = [title_tasks, description_tasks, status, priority];
 
   try {
     const result = await pool.query(query, values);
@@ -17,10 +19,14 @@ exports.criarTarefa = async (req, res) => {
   }
 };
 
+
 // Listar todas as tarefas
 exports.listarTarefas = async (req, res) => {
-  const query = 'SELECT * FROM tasks';
-
+  const query = `
+      SELECT * FROM tasks
+      WHERE is_deleted = FALSE
+      ORDER BY created_at DESC
+    `;
   try {
     const result = await pool.query(query);
     res.status(200).json(result.rows);
@@ -32,12 +38,18 @@ exports.listarTarefas = async (req, res) => {
 // Editar uma tarefa
 exports.editarTarefa = async (req, res) => {
   const { id } = req.params;
-  const { title_tasks, description_tasks, status } = req.body;
+  const { title_tasks, description_tasks, status, priority } = req.body;
 
   const query = `
-    UPDATE tasks SET title_tasks = $1, description_tasks = $2, status = $3, updated_at = CURRENT_TIMESTAMP
-    WHERE id = $4 RETURNING *`;
-  const values = [title_tasks, description_tasks, status, id];
+    UPDATE tasks
+    SET title_tasks = $1,
+        description_tasks = $2,
+        status = $3,
+        priority = $4,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = $5
+    RETURNING *`;
+  const values = [title_tasks, description_tasks, status, priority,id];
 
   try {
     const result = await pool.query(query, values);
@@ -67,3 +79,4 @@ exports.excluirTarefa = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Tarefas</title>
+</head>
+<body>
+  <h1>Cadastro de Tarefas</h1>
+
+  <!-- Formulário para adicionar tarefa -->
+  <form action="/tarefas" method="POST">
+    <input name="title_tasks" placeholder="Título da tarefa" required>
+    <input name="description_tasks" placeholder="Descrição da tarefa" required>
+
+    <!-- Campos ENUM -->
+    <select name="status" required>
+      <option value="Pendente">Pendente</option>
+      <option value="Em andamento">Em andamento</option>
+      <option value="Concluída">Concluída</option>
+    </select>
+
+    <select name="priority" required>
+      <option value="Baixa">Baixa</option>
+      <option value="Média">Média</option>
+      <option value="Alta">Alta</option>
+    </select>
+
+    <button type="submit">Adicionar</button>
+  </form>
+
+  <hr>
+
+  <h2>Lista de Tarefas</h2>
+  <% tarefas.forEach(tarefa => { %>
+    <!-- Formulário para editar tarefa -->
+    <form action="/tarefas/edit/<%= tarefa.id %>" method="POST" style="display:inline;">
+      <input name="title_tasks" value="<%= tarefa.title_tasks %>" required>
+      <input name="description_tasks" value="<%= tarefa.description_tasks %>" required>
+
+      <!-- ENUMs para editar -->
+      <select name="status" required>
+        <option value="Pendente" <%= tarefa.status === 'Pendente' ? 'selected' : '' %>>Pendente</option>
+        <option value="Em andamento" <%= tarefa.status === 'Em andamento' ? 'selected' : '' %>>Em andamento</option>
+        <option value="Concluída" <%= tarefa.status === 'Concluída' ? 'selected' : '' %>>Concluída</option>
+      </select>
+
+      <select name="priority" required>
+        <option value="Baixa" <%= tarefa.priority === 'Baixa' ? 'selected' : '' %>>Baixa</option>
+        <option value="Média" <%= tarefa.priority === 'Média' ? 'selected' : '' %>>Média</option>
+        <option value="Alta" <%= tarefa.priority === 'Alta' ? 'selected' : '' %>>Alta</option>
+      </select>
+
+      <button type="submit">✏️</button>
+    </form>
+
+    <!-- Exclusão lógica da tarefa -->
+    <form action="/tarefas/delete/<%= tarefa.id %>" method="POST" style="display:inline;">
+      <button type="submit" onclick="return confirm('Tem certeza que deseja excluir a tarefa?')">🗑️</button>
+    </form>
+    <br>
+  <% }) %>
+</body>
+</html>

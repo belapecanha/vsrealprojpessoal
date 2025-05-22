@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Rotas
-const routes = require('./routes/index');
+const routes = require('./routes/tarefasRoutes');
 app.use('/', routes);
 
 // Usando as rotas definidas
