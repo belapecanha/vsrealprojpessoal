@@ -23,7 +23,10 @@ O sistema proposto consiste em uma aplicação web para gerenciamento de tarefas
 
 ### 3.1. Modelagem do banco de dados  (Semana 3)
 Modelo relacional
-![Modelo Relacional](./assets/modelorelacional.png)
+![Modelo Relacional](./assets/modelorelacional2.0.png)
+
+O modelo relacional é uma forma estruturada de organizar os dados de um banco por meio de tabelas, onde cada tabela representa uma entidade (como usuários, tarefas ou projetos), com colunas que definem os atributos e linhas que representam os registros. As tabelas se conectam por chaves primárias e estrangeiras, o que permite relacionar as informações sem repetir dados. 
+
 
 Modelo Físico
 ```SQL
@@ -127,9 +130,17 @@ CREATE TABLE attachments (
   FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
 );
 ```
+O modelo físico é a etapa onde tudo aquilo que foi pensado no modelo lógico vira código e estrutura real dentro do banco de dados. Nele, definimos exatamente como as tabelas vão ser criadas, os tipos de dados de cada coluna, os índices, restrições e como os dados vão ser armazenados. É onde o banco começa a existir de fato, com comandos SQL que criam as tabelas e relações.
+
 
 ### 3.1.1 BD e Models (Semana 5)
-*Descreva aqui os Models implementados no sistema web*
+No projeto, foram implementados diversos models para gerenciar as diferentes entidades do banco de dados. Cada model é responsável pela lógica de acesso aos dados e as regras de negócio específicas de cada entidade. Os models implementados no meu projeto são: 
+**tarefa** -> Responsável pelo gerenciamento das tarefas, ele **possui** métodos para validar as relações, criar, listar, editar e deletar tarefas.
+**usuario** -> Responsável por gerenciar os usuários do sistema, ele possui métodos para criar, editar, deletar e listar os usuários.
+**projeto** -> Responsável por controlar os projetos, ele possui métodos para listar, editar, atualizar e deletar projetos.
+**time** -> Responsável pela administração dos times, ele possui **métodos** para listar, criar, atualizar e deletar times.
+**label** -> Responsável por gerenciar as etiquetas do sistema com métodos para listar, criar, atualizar e remover etiquetas.
+**timesprojetos e labelsTasks** -> Responsáveis por gerenciar as relações entre tasks - labels e times - projetos. Isso é necessário devido a terem uma relação N:N, ou seja, uma task pode ter várias labels e uma label pode pertencer a várias tasks, com o mesmo acontecendo entre times e projetos
 
 ### 3.2. Arquitetura (Semana 5)
 
