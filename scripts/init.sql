@@ -87,13 +87,3 @@ CREATE TABLE task_labels (
 
 CREATE INDEX idx_task_labels_task ON task_labels(task_id);
 CREATE INDEX idx_task_labels_label ON task_labels(label_id);
-
--- Attachments Table
-CREATE TABLE attachments (
-  id SERIAL PRIMARY KEY,
-  file_name VARCHAR(200) NOT NULL,
-  file_path TEXT NOT NULL,
-  task_id INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
-);

@@ -24,18 +24,17 @@ exports.listarTarefas = async (req, res) => {
 // Editar uma tarefa
 exports.editarTarefa = async (req, res) => {
   const { id } = req.params;
-  const { title_tasks, description_tasks, status = 'Pendente', priority = 'Média', user_id, team_id, project_id } = req.body;
+  const { title_tasks, description_tasks, status, priority } = req.body;
 
   const query = `
     UPDATE tasks 
     SET title_tasks = $1,
         description_tasks = $2,
         status = $3,
-        priority = $4,
-        updated_at = CURRENT_TIMESTAMP
-    WHERE id = $5
+        priority = $4
+    WHERE id = $5 AND is_deleted = FALSE
     RETURNING *`;
-  const values = [title_tasks, description_tasks, status = 'Pendente', priority = 'Média', user_id, team_id, project_id, id];
+  const values = [title_tasks, description_tasks, status, priority, id];
 
   try {
     const result = await pool.query(query, values);
@@ -44,6 +43,7 @@ exports.editarTarefa = async (req, res) => {
     }
     res.status(200).json(result.rows[0]);
   } catch (err) {
+    console.error('Erro ao atualizar tarefa:', err);
     res.status(500).json({ error: err.message });
   }
 };

@@ -2,7 +2,7 @@ const pool = require('../config/database');
 
 class TarefaModel {
   // Validar relações com outras tabelas
-  static async validarRelacoes(usuario_id, time_id, projeto_id) {
+  static async validarRelacoes(usuario_id, time_id, projeto_id, labels_id) {
     if (usuario_id) {
       const usuarioExiste = await pool.query('SELECT id FROM users WHERE id = $1', [usuario_id]);
       if (usuarioExiste.rows.length === 0) {
@@ -23,6 +23,12 @@ class TarefaModel {
         throw new Error('Projeto não encontrado');
       }
     }
+    if (labels_id) {
+      const etiquetaExiste = await pool.query('SELECT id FROM projects WHERE id = $1', [labels_id]);
+      if (etiquetaExiste.rows.length === 0) {
+        throw new Error('Etiqueta não encontrado');
+      }
+    }
   }
 
   // Criar uma nova tarefa
@@ -34,11 +40,12 @@ class TarefaModel {
       priority = 'Média',
       user_id,
       team_id,
-      project_id 
+      project_id,
+      labels_id
     } = dados;
 
     // Validar relações antes de criar
-    await this.validarRelacoes(user_id, team_id, project_id);
+    await this.validarRelacoes(user_id, team_id, project_id, labels_id);
 
     const query = `
       WITH inserted_task AS (
@@ -49,7 +56,8 @@ class TarefaModel {
           priority,
           user_id,
           team_id,
-          project_id
+          project_id,
+          labels_id
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *
@@ -91,11 +99,22 @@ class TarefaModel {
       LEFT JOIN teams tm ON t.team_id = tm.id
       LEFT JOIN projects p ON t.project_id = p.id
       WHERE t.is_deleted = FALSE
-      ORDER BY t.created_at DESC`;
+      ORDER BY t.id DESC`;
     
     const resultado = await pool.query(query);
     return resultado.rows;
   }
+
+ // Atualizar um projeto
+  static async update( title_tasks, description_tasks, status, priority,user_id,team_id,project_id ) {
+    const result = await db.query(
+      'UPDATE tasks SET title_tasks = $1, description_tasks = $2, status = $3, priority = $4, user_id = $5, team_id = $6, project_id = $7 WHERE id = $8 RETURNING *',
+      [title_tasks, description_tasks, status, priority,user_id,team_id,project_id, id]
+    );
+    return result.rows[0];
+  }
+
+
 }
 
 module.exports = TarefaModel;
