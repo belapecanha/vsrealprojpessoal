@@ -1,7 +1,21 @@
 const pool = require('../config/database');
 
 class TimeProjetoModel {
+  static async verificarRelacaoExistente(time_id, projeto_id) {
+    const query = `
+      SELECT * FROM team_projects 
+      WHERE team_id = $1 AND project_id = $2`;
+    const result = await pool.query(query, [time_id, projeto_id]);
+    return result.rows.length > 0;
+  }
+
   static async criar(time_id, projeto_id) {
+    // Verificar se a relação já existe
+    const relacaoExiste = await this.verificarRelacaoExistente(time_id, projeto_id);
+    if (relacaoExiste) {
+      throw new Error('Este projeto já está atribuído a este time');
+    }
+
     const query = `
       INSERT INTO team_projects (team_id, project_id)
       VALUES ($1, $2)

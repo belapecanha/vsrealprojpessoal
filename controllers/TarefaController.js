@@ -3,22 +3,21 @@ const TarefaModel = require('../models/tarefa');
 
 exports.criarTarefa = async (req, res) => {
   try {
-    const tarefa = await TarefaModel.create(req.body);
+    const tarefa = await TarefaModel.criar(req.body);
     res.status(201).json(tarefa);
   } catch (err) {
     console.error('Erro ao criar tarefa:', err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ erro: err.message });
   }
 };
 
-// Listar todas as tarefas
 exports.listarTarefas = async (req, res) => {
   try {
-    const tarefas = await TarefaModel.findAll();
+    const tarefas = await TarefaModel.listarTodas();
     res.status(200).json(tarefas);
   } catch (err) {
     console.error('Erro ao listar tarefas:', err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ erro: err.message });
   }
 };
 
