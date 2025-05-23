@@ -10,10 +10,10 @@ router.get('/tarefas', TarefaController.listarTarefas);
 router.post('/tarefas/criar', TarefaController.criarTarefa);
 
 // Editar tarefa
-router.post('/tarefas/edit/:id', TarefaController.editarTarefa);
+router.put('/tarefas/edit/:id', TarefaController.editarTarefa);
 
 // "Excluir" tarefa 
-router.post('/tarefas/delete/:id', TarefaController.excluirTarefa);
+router.delete('/tarefas/delete/:id', TarefaController.excluirTarefa);
 
 module.exports = router;
 

@@ -12,24 +12,25 @@ Content-Type: application/json
   "description_tasks": "Descrição da tarefa",
   "status": "Pendente",
   "priority": "Média",
-  "user_id": 2,
+  "user_id": 3,
   "team_id": 4,
-  "project_id": 2
+  "project_id": 2,
+  "label_id": 1
 }
 
 ### editar task
-POST http://localhost:3000/api/tarefas/edit/1
+PUT http://localhost:3000/api/tarefas/edit/8
 Content-Type: application/json
 
 {
-  "title_tasks": "Tarefa Atualizada3",
+  "title_tasks": "Tarefa Atualizada5",
   "description_tasks": "Nova descrição",
   "status": "Em andamento",
   "priority": "Alta"
 }
 
 ### deletar task
-POST http://localhost:3000/api/tarefas/delete/1
+DELETE http://localhost:3000/api/tarefas/delete/8
 
 ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -44,23 +45,23 @@ POST http://localhost:3000/api/usuarios/criar
 Content-Type: application/json
 
 {
-  "name_users": "Usuario teste8",
+  "name_users": "Usuario teste10",
   "email": "teste8@gmail.com",
   "password": "123456"
 }
 
 ### editar usuário
-POST http://localhost:3000/api/usuarios/edit/9
+PUT http://localhost:3000/api/usuarios/edit/10
 Content-Type: application/json
 
 {
- "name_users": "Usuario atualizado 5",
-  "email": "novoemail2@gmail.com",
+ "name_users": "Usuario atualizado 7",
+  "email": "novoemail7@gmail.com",
   "password": "123456"
 }
 
 ### deletar usuário
-POST http://localhost:3000/api/usuarios/delete/2
+DELETE http://localhost:3000/api/usuarios/delete/10
 
 ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -75,23 +76,23 @@ POST http://localhost:3000/api/projeto/criar
 Content-Type: application/json
 
 {
-  "name_projects": "projeto teste3",
-  "description_projects": "descrição do projeto teste3",
+  "name_projects": "projeto teste4",
+  "description_projects": "descrição do projeto teste4",
   "color_projects": "123456"
 }
 
 ### editar projeto
-POST http://localhost:3000/api/projeto/edit/3
+PUT http://localhost:3000/api/projeto/edit/4
 Content-Type: application/json
 
 {
-  "name_projects": "projeto atualizado",
+  "name_projects": "projeto atualizado4",
   "description_projects": "descrição do projeto teste atualizado",
   "color_projects": "123456"
 }
 
 ### deletar projeto
-POST http://localhost:3000/api/projeto/delete/3
+DELETE http://localhost:3000/api/projeto/delete/4
 
 ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -106,11 +107,11 @@ POST http://localhost:3000/api/time/criar
 Content-Type: application/json
 
 {
-  "name_teams": "time teste2"
+  "name_teams": "time teste6"
 }
 
 ### editar time
-POST http://localhost:3000/api/time/edit/3
+PUT http://localhost:3000/api/time/edit/9
 Content-Type: application/json
 
 {
@@ -118,7 +119,7 @@ Content-Type: application/json
 }
 
 ### deletar time
-POST http://localhost:3000/api/time/delete/3
+DELETE http://localhost:3000/api/time/delete/9
 
 
 ### Atribuir projeto ao time
@@ -153,13 +154,13 @@ POST http://localhost:3000/api/label/criar
 Content-Type: application/json
 
 {
-  "name_labels": "etiqueta teste2",
+  "name_labels": "etiqueta teste4",
   "color_labels": "azul",
   "description_labels": "descrição da etiqueta teste2"
 }
 
 ### editar etiqueta
-POST http://localhost:3000/api/label/edit/1
+PUT http://localhost:3000/api/label/edit/4
 Content-Type: application/json
 
 {
@@ -169,12 +170,16 @@ Content-Type: application/json
 }
 
 ### deletar etiqueta
-POST http://localhost:3000/api/label/delete/2
+DELETE http://localhost:3000/api/label/delete/2
 
 ----------------------------------------------------------------------------------------------------------------------------------------------
 
 ### TASKS-LABELS
 
+### Listar etiquetas da tarefa
+GET http://localhost:3000/api/tasks-labels/task/5
+### Listar tarefas com a etiqueta
+GET http://localhost:3000/api/tasks-labels/label/1
 ### Atribuir etiqueta à tarefa
 POST http://localhost:3000/api/tasks-labels
 Content-Type: application/json
@@ -183,11 +188,5 @@ Content-Type: application/json
   "task_id": 5,
   "label_id": 1
 }
-
-### Listar etiquetas da tarefa
-GET http://localhost:3000/api/tasks-labels/task/5
-### Listar tarefas com a etiqueta
-GET http://localhost:3000/api/tasks-labels/label/1
-
 ### Remover etiqueta da tarefa
 DELETE http://localhost:3000/api/tasks-labels/5/1

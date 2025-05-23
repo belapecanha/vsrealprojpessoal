@@ -34,6 +34,18 @@ class TimeModel {
     return result.rows[0];
   }
 
+  static async atualizar(id, dados) {
+    const query = `
+      UPDATE teams 
+      SET name_teams = $1
+      WHERE id = $2 AND is_deleted = FALSE
+      RETURNING *`;
+
+    const valores = [dados.name_teams, id];
+    const resultado = await pool.query(query, valores);
+    return resultado.rows[0];
+  }
+
   // Deletar um projeto
   static async delete(id) {
     await db.query('DELETE FROM teams WHERE id = $1', [id]);

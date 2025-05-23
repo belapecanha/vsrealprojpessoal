@@ -46,6 +46,26 @@ class LabelTaskModel {
     const result = await pool.query(query, [task_id, label_id]);
     return result.rows[0];
   }
+
+  static async atualizar(task_id, label_id, dados) {
+    const query = `
+      UPDATE task_labels 
+      SET 
+        task_id = $1,
+        label_id = $2
+      WHERE task_id = $3 AND label_id = $4
+      RETURNING *`;
+
+    const valores = [
+      dados.task_id,
+      dados.label_id,
+      task_id,
+      label_id
+    ];
+
+    const resultado = await pool.query(query, valores);
+    return resultado.rows[0];
+  }
 }
 
 module.exports = LabelTaskModel;

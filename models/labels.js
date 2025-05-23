@@ -23,17 +23,25 @@ class LabelModel {
     return result.rows[0];
   }
 
-  static async update(id, name_labels, color_labels, description_labels) { 
+  static async atualizar(id, dados) {
     const query = `
-      UPDATE labels
-      SET name_labels = $1, 
-          color_labels = $2, 
-          description_labels = $3
-      WHERE id = $4  
-      RETURNING *
-    `;
-    const result = await pool.query(query, [name_labels, color_labels, description_labels, id]);
-    return result.rows[0];
+      UPDATE labels 
+      SET 
+        name_labels = $1,
+        color_labels = $2,
+        description_labels = $3
+      WHERE id = $4 AND is_deleted = FALSE
+      RETURNING *`;
+
+    const valores = [
+      dados.name_labels,
+      dados.color_labels,
+      dados.description_labels,
+      id
+    ];
+
+    const resultado = await pool.query(query, valores);
+    return resultado.rows[0];
   }
 
   // Deleta uma labeç

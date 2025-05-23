@@ -10,9 +10,9 @@ router.get('/label', LabelController.listarLabel);
 router.post('/label/criar', LabelController.criarLabel);
 
 // Editar tarefa
-router.post('/label/edit/:id', LabelController.editarLabel);
+router.put('/label/edit/:id', LabelController.editarLabel);
 
 // "Excluir" tarefa 
-router.post('/label/delete/:id', LabelController.excluirLabel);
+router.delete('/label/delete/:id', LabelController.excluirLabel);
 
 module.exports = router;

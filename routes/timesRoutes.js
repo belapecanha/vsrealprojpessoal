@@ -10,9 +10,9 @@ router.get('/time', TimeController.listarTime);
 router.post('/time/criar', TimeController.criarTime);
 
 // Editar tarefa
-router.post('/time/edit/:id', TimeController.editarTime);
+router.put('/time/edit/:id', TimeController.editarTime);
 
 // "Excluir" tarefa 
-router.post('/time/delete/:id', TimeController.excluirTime);
+router.delete('/time/delete/:id', TimeController.excluirTime);
 
 module.exports = router;

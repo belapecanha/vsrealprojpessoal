@@ -24,12 +24,25 @@ class UsuarioModel {
   }
 
   // Atualizar uma task existente
-  static async update(name_users, email, password) {
-    const result = await db.query(
-      'UPDATE tasks SET name_users = $1, email = $2, status = $3, password = $4 WHERE id = $5 RETURNING *',
-      [name_users, email, password, id]
-    );
-    return result.rows[0];
+  static async atualizar(id, dados) {
+    const query = `
+      UPDATE users 
+      SET 
+        name_users = $1,
+        email = $2,
+        password = $3
+      WHERE id = $4 AND is_deleted = FALSE
+      RETURNING *`;
+
+    const valores = [
+      dados.name_users,
+      dados.email,
+      dados.password,
+      id
+    ];
+
+    const resultado = await pool.query(query, valores);
+    return resultado.rows[0];
   }
 
   // Deletar uma task

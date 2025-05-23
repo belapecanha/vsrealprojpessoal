@@ -2,7 +2,7 @@ const pool = require('../config/database');
 
 class TarefaModel {
   // Validar relações com outras tabelas
-  static async validarRelacoes(usuario_id, time_id, projeto_id, labels_id) {
+  static async validarRelacoes(usuario_id, time_id, projeto_id, label_id) {
     if (usuario_id) {
       const usuarioExiste = await pool.query('SELECT id FROM users WHERE id = $1', [usuario_id]);
       if (usuarioExiste.rows.length === 0) {
@@ -23,32 +23,36 @@ class TarefaModel {
         throw new Error('Projeto não encontrado');
       }
     }
-    if (labels_id) {
-      const etiquetaExiste = await pool.query('SELECT id FROM projects WHERE id = $1', [labels_id]);
+    if (label_id) {
+      const etiquetaExiste = await pool.query('SELECT id FROM labels WHERE id = $1', [label_id]);
       if (etiquetaExiste.rows.length === 0) {
-        throw new Error('Etiqueta não encontrado');
+        throw new Error('Etiqueta não encontrada');
       }
     }
   }
 
   // Criar uma nova tarefa
   static async criar(dados) {
-    const { 
-      title_tasks, 
-      description_tasks, 
-      status = 'Pendente', 
-      priority = 'Média',
-      user_id,
-      team_id,
-      project_id,
-      labels_id
-    } = dados;
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      
+      const { 
+        title_tasks, 
+        description_tasks, 
+        status = 'Pendente', 
+        priority = 'Média',
+        user_id,
+        team_id,
+        project_id,
+        label_id
+      } = dados;
 
-    // Validar relações antes de criar
-    await this.validarRelacoes(user_id, team_id, project_id, labels_id);
+      // Validar relações antes de criar
+      await this.validarRelacoes(user_id, team_id, project_id, label_id);
 
-    const query = `
-      WITH inserted_task AS (
+      // Criar a tarefa
+      const queryTarefa = `
         INSERT INTO tasks (
           title_tasks, 
           description_tasks, 
@@ -56,34 +60,41 @@ class TarefaModel {
           priority,
           user_id,
           team_id,
-          project_id,
-          labels_id
+          project_id
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING *
-      )
-      SELECT 
-        t.*,
-        u.name_users,
-        tm.name_teams,
-        p.name_projects
-      FROM inserted_task t
-      LEFT JOIN users u ON t.user_id = u.id
-      LEFT JOIN teams tm ON t.team_id = tm.id
-      LEFT JOIN projects p ON t.project_id = p.id`;
+        RETURNING *`;
 
-    const valores = [
-      title_tasks, 
-      description_tasks, 
-      status, 
-      priority,
-      user_id,
-      team_id,
-      project_id
-    ];
+      const valores = [
+        title_tasks, 
+        description_tasks, 
+        status, 
+        priority,
+        user_id,
+        team_id,
+        project_id
+      ];
 
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0];
+      const resultadoTarefa = await client.query(queryTarefa, valores);
+      const tarefa = resultadoTarefa.rows[0];
+
+      // Se houver label_id, criar a relação na tabela de junção
+      if (label_id) {
+        await client.query(
+          'INSERT INTO task_labels (task_id, label_id) VALUES ($1, $2)',
+          [tarefa.id, label_id]
+        );
+      }
+
+      await client.query('COMMIT');
+      return tarefa;
+
+    } catch (erro) {
+      await client.query('ROLLBACK');
+      throw erro;
+    } finally {
+      client.release();
+    }
   }
 
   // Listar todas as tarefas
@@ -114,7 +125,29 @@ class TarefaModel {
     return result.rows[0];
   }
 
+  // Atualizar uma tarefa existente
+  static async atualizar(id, dados) {
+    const query = `
+      UPDATE tasks 
+      SET 
+        title_tasks = $1,
+        description_tasks = $2,
+        status = $3,
+        priority = $4
+      WHERE id = $5 AND is_deleted = FALSE
+      RETURNING *`;
 
+    const valores = [
+      dados.title_tasks,
+      dados.description_tasks,
+      dados.status,
+      dados.priority,
+      id
+    ];
+
+    const resultado = await pool.query(query, valores);
+    return resultado.rows[0];
+  }
 }
 
 module.exports = TarefaModel;

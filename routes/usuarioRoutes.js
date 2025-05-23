@@ -5,7 +5,7 @@ const UsuariosController = require('../controllers/UsuariosController');
 // Rotas para usuários
 router.get('/usuarios', UsuariosController.listarUsuario);
 router.post('/usuarios/criar', UsuariosController.criarUsuario);
-router.post('/usuarios/edit/:id', UsuariosController.editarUsuario);
-router.post('/usuarios/delete/:id', UsuariosController.excluirUsuario);
+router.put('/usuarios/edit/:id', UsuariosController.editarUsuario);
+router.delete('/usuarios/delete/:id', UsuariosController.excluirUsuario);
 
 module.exports = router;

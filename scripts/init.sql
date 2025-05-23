@@ -1,9 +1,17 @@
 -- ENUM 
-CREATE TYPE task_status AS ENUM ('Pendente', 'Em andamento', 'Concluída');
-CREATE TYPE task_priority AS ENUM ('Baixa', 'Média', 'Alta');
+DO $$ 
+BEGIN 
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_status') THEN
+        CREATE TYPE task_status AS ENUM ('Pendente', 'Em andamento', 'Concluída');
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_priority') THEN
+        CREATE TYPE task_priority AS ENUM ('Baixa', 'Média', 'Alta');
+    END IF;
+END $$;
 
 -- Users Table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   name_users VARCHAR(100) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
@@ -12,7 +20,7 @@ CREATE TABLE users (
 );
 
 -- Projects Table
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
   id SERIAL PRIMARY KEY,
   name_projects VARCHAR(100) NOT NULL,
   description_projects TEXT,
@@ -21,14 +29,14 @@ CREATE TABLE projects (
 );
 
 -- Teams Table
-CREATE TABLE teams (
+CREATE TABLE IF NOT EXISTS teams (
   id SERIAL PRIMARY KEY,
   name_teams VARCHAR(100) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Team-Projects Table
-CREATE TABLE team_projects (
+CREATE TABLE IF NOT EXISTS team_projects (
   team_id INT NOT NULL,
   project_id INT NOT NULL,
   assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -37,11 +45,19 @@ CREATE TABLE team_projects (
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_team_projects_team ON team_projects(team_id);
-CREATE INDEX idx_team_projects_project ON team_projects(project_id);
+-- Create indexes
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_team_projects_team') THEN
+        CREATE INDEX idx_team_projects_team ON team_projects(team_id);
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_team_projects_project') THEN
+        CREATE INDEX idx_team_projects_project ON team_projects(project_id);
+    END IF;
+END$$;
 
 -- Team Members Table
-CREATE TABLE team_members (
+CREATE TABLE IF NOT EXISTS team_members (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL,
   team_id INT NOT NULL,
@@ -52,7 +68,7 @@ CREATE TABLE team_members (
 );
 
 -- Tasks Table
-CREATE TABLE tasks (
+CREATE TABLE IF NOT EXISTS tasks (
   id SERIAL PRIMARY KEY,
   title_tasks VARCHAR(225) NOT NULL,
   description_tasks TEXT,
@@ -69,7 +85,7 @@ CREATE TABLE tasks (
 );
 
 -- Labels Table 
-CREATE TABLE labels (
+CREATE TABLE IF NOT EXISTS labels (
   id SERIAL PRIMARY KEY,
   name_labels VARCHAR(200) NOT NULL,
   color_labels VARCHAR(20) DEFAULT ('#898989'),
@@ -77,7 +93,7 @@ CREATE TABLE labels (
 );
 
 -- Task-Labels Table
-CREATE TABLE task_labels (
+CREATE TABLE IF NOT EXISTS task_labels (
   id SERIAL PRIMARY KEY,
   task_id INT NOT NULL,
   label_id INT NOT NULL,
@@ -85,5 +101,13 @@ CREATE TABLE task_labels (
   FOREIGN KEY (label_id) REFERENCES labels(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_task_labels_task ON task_labels(task_id);
-CREATE INDEX idx_task_labels_label ON task_labels(label_id);
+-- Create indexes 
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_task_labels_task') THEN
+        CREATE INDEX idx_task_labels_task ON task_labels(task_id);
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_task_labels_label') THEN
+        CREATE INDEX idx_task_labels_label ON task_labels(label_id);
+    END IF;
+END$$;

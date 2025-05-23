@@ -10,9 +10,9 @@ router.get('/projeto', ProjetoController.listarProjeto);
 router.post('/projeto/criar', ProjetoController.criarProjeto);
 
 // Editar tarefa
-router.post('/projeto/edit/:id', ProjetoController.editarProjeto);
+router.put('/projeto/edit/:id', ProjetoController.editarProjeto);
 
 // "Excluir" tarefa 
-router.post('/projeto/delete/:id', ProjetoController.excluirProjeto);
+router.delete('/projeto/delete/:id', ProjetoController.excluirProjeto);
 
 module.exports = router;

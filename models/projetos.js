@@ -24,12 +24,25 @@ class ProjetoModel {
   }
 
   // Atualizar um projeto
-  static async update(name_projects, description_projects, color_projects ) {
-    const result = await db.query(
-      'UPDATE tasks SET name_projects = $1, description_projects = $2, color_projects = $3 WHERE id = $4 RETURNING *',
-      [name_projects, description_projects, color_projects, id]
-    );
-    return result.rows[0];
+  static async atualizar(id, dados) {
+    const query = `
+      UPDATE projects 
+      SET 
+        name_projects = $1,
+        description_projects = $2,
+        color_projects = $3
+      WHERE id = $4 AND is_deleted = FALSE
+      RETURNING *`;
+
+    const valores = [
+      dados.name_projects,
+      dados.description_projects,
+      dados.color_projects,
+      id
+    ];
+
+    const resultado = await pool.query(query, valores);
+    return resultado.rows[0];
   }
 
   // Deletar um projeto
