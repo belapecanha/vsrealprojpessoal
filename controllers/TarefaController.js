@@ -2,19 +2,11 @@ const pool = require('../config/database');
 const TarefaModel = require('../models/tarefa');
 
 exports.criarTarefa = async (req, res) => {
-  const { title_tasks, description_tasks, status = 'Pendente', priority = 'Média' } = req.body;
-
-  const query = `
-    INSERT INTO tasks (title_tasks, description_tasks, status, priority)
-    VALUES ($1, $2, $3, $4)
-    RETURNING *`;
-  const values = [title_tasks, description_tasks, status, priority];
-
   try {
-    const result = await pool.query(query, values);
-    const tarefa = result.rows[0];
+    const tarefa = await TarefaModel.create(req.body);
     res.status(201).json(tarefa);
   } catch (err) {
+    console.error('Erro ao criar tarefa:', err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -25,6 +17,7 @@ exports.listarTarefas = async (req, res) => {
     const tarefas = await TarefaModel.findAll();
     res.status(200).json(tarefas);
   } catch (err) {
+    console.error('Erro ao listar tarefas:', err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -32,7 +25,7 @@ exports.listarTarefas = async (req, res) => {
 // Editar uma tarefa
 exports.editarTarefa = async (req, res) => {
   const { id } = req.params;
-  const { title_tasks, description_tasks, status, priority } = req.body;
+  const { title_tasks, description_tasks, status = 'Pendente', priority = 'Média', user_id, team_id, project_id } = req.body;
 
   const query = `
     UPDATE tasks 
@@ -43,7 +36,7 @@ exports.editarTarefa = async (req, res) => {
         updated_at = CURRENT_TIMESTAMP
     WHERE id = $5
     RETURNING *`;
-  const values = [title_tasks, description_tasks, status, priority, id];
+  const values = [title_tasks, description_tasks, status = 'Pendente', priority = 'Média', user_id, team_id, project_id, id];
 
   try {
     const result = await pool.query(query, values);

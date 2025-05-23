@@ -1,18 +1,20 @@
-
 ### TASKS
 ### listar tasks
 GET http://localhost:3000/api/tarefas
 Content-Type: application/json
 
-### criar nova task
+### criar nova task com vínculos
 POST http://localhost:3000/api/tarefas/criar
 Content-Type: application/json
 
 {
-  "title_tasks": "Tarefa Teste2",
-  "description_tasks": "Descrição da tarefa teste",
+  "title_tasks": "Nova Tarefa Vinculada",
+  "description_tasks": "Descrição da tarefa",
   "status": "Pendente",
-  "priority": "Média"
+  "priority": "Média",
+  "user_id": 2,
+  "team_id": 4,
+  "project_id": 2
 }
 
 ### editar task
@@ -104,7 +106,7 @@ POST http://localhost:3000/api/time/criar
 Content-Type: application/json
 
 {
-  "name_teams": "time teste1"
+  "name_teams": "time teste2"
 }
 
 ### editar time
@@ -118,3 +120,22 @@ Content-Type: application/json
 ### deletar time
 POST http://localhost:3000/api/time/delete/3
 
+----------------------------------------------------------------------------------------------------------------------------------------------
+### Atribuir projeto ao time
+POST http://localhost:3000/api/times-projetos
+Content-Type: application/json
+
+{
+  "time_id": 5,
+  "projeto_id": 2
+}
+
+### Listar projetos do time
+GET http://localhost:3000/api/times-projetos/time/4
+
+### Listar times do projeto
+GET http://localhost:3000/api/times-projetos/projeto/2
+Content-Type: application/json
+
+### Remover projeto do time
+DELETE http://localhost:3000/api/times-projetos/1/1

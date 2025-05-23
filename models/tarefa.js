@@ -4,38 +4,53 @@ class TarefaModel {
   // Listar todos as tasks
   static async findAll() {
     const query = `
-      SELECT * FROM tasks 
-      WHERE is_deleted = FALSE 
-      ORDER BY created_at DESC
-    `;
+      SELECT 
+        t.*,
+        u.name_users,
+        tm.name_teams,
+        p.name_projects
+      FROM tasks t
+      LEFT JOIN users u ON t.user_id = u.id
+      LEFT JOIN teams tm ON t.team_id = tm.id
+      LEFT JOIN projects p ON t.project_id = p.id
+      WHERE t.is_deleted = FALSE
+      ORDER BY t.created_at DESC`;
+    
     const result = await pool.query(query);
     return result.rows;
   }
 
   // Criar uma nova task
   static async create(data) {
-    const { title_tasks, description_tasks, status, priority } = data;
+    const { title_tasks, description_tasks, status, priority,user_id,
+      team_id,
+      project_id } = data;
     const query = `
-      INSERT INTO tasks (title_tasks, description_tasks, status, priority)
-      VALUES ($1, $2, $3, $4)
-      RETURNING *
-    `;
-    const result = await pool.query(query, [title_tasks, description_tasks, status, priority]);
-    return result.rows[0];
-  }
+      INSERT INTO tasks (title_tasks, description_tasks, status, priority, user_id, team_id, project_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING 
+        t.*,
+        u.name_users,
+        tm.name_teams,
+        p.name_projects
+      FROM tasks t
+      LEFT JOIN users u ON t.user_id = u.id
+      LEFT JOIN teams tm ON t.team_id = tm.id
+      LEFT JOIN projects p ON t.project_id = p.id
+      WHERE t.id = (SELECT currval('tasks_id_seq'))`;
+    
+    const values = [
+      title_tasks, 
+      description_tasks, 
+      status || 'Pendente', 
+      priority || 'Média',
+      user_id,
+      team_id,
+      project_id
+    ];
 
-  // Atualizar uma task existente
-  static async update(title_tasks, description_tasks, status, priority ) {
-    const result = await db.query(
-      'UPDATE tasks SET title_tasks = $1, description_tasks = $2, status = $3, priority = $4 WHERE id = $5 RETURNING *',
-      [title_tasks, description_tasks, status, priority, id]
-    );
+    const result = await pool.query(query, values);
     return result.rows[0];
-  }
-
-  // Deletar uma task
-  static async delete(id) {
-    await db.query('DELETE FROM task WHERE id = $1', [id]);
   }
 }
 
