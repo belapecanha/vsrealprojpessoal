@@ -5,6 +5,7 @@ const cors = require('cors');
 const tarefasRoutes = require('./routes/tarefasRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const projetosRoutes = require('./routes/projetosRoutes');
+const timesRoutes = require('./routes/timesRoutes');
 
 const app = express();
 const PORT = 3000;
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use('/api', tarefasRoutes);
 app.use('/api', usuarioRoutes);
 app.use('/api', projetosRoutes);
+app.use('/api', timesRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);

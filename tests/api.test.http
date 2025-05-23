@@ -91,3 +91,30 @@ Content-Type: application/json
 ### deletar projeto
 POST http://localhost:3000/api/projeto/delete/1
 
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+### Times
+
+### listar times
+GET http://localhost:3000/api/time
+Content-Type: application/json
+
+### criar novo time
+POST http://localhost:3000/api/time/criar
+Content-Type: application/json
+
+{
+  "name_teams": "time teste1"
+}
+
+### editar time
+POST http://localhost:3000/api/time/edit/3
+Content-Type: application/json
+
+{
+  "name_teams": "time atualizado2"
+}
+
+### deletar time
+POST http://localhost:3000/api/time/delete/3
+
