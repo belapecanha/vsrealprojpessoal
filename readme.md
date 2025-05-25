@@ -60,6 +60,7 @@ projetopessoal-modulo2/<br>
 ├── package-lock.json<br>
 ├── README.md<br>
 ├── WAD.md<br>
+├── rest.http<br>
 └── server.js<br>
 
 ## Como executar o projeto localmente
