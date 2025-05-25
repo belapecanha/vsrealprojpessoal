@@ -143,56 +143,94 @@ com **label** -> Responsável por gerenciar as etiquetas do sistema com métodos
 **timesprojetos e labelsTasks** -> Responsáveis por gerenciar as relações entre tasks - labels e times - projetos. Isso é necessário devido a terem uma relação N:N, ou seja, uma task pode ter várias labels e uma label pode pertencer a várias tasks, com o mesmo acontecendo entre times e projetos
 
 ### 3.2. Arquitetura (Semana 5)
+![Diagrama de arquitetura](./assets/Diagramadearq.jpg)
 
-*Posicione aqui o diagrama de arquitetura da sua solução de aplicação web. Atualize sempre que necessário.*
+A arquitetura do sistema segue o padrão MVC (Model-View-Controller):
+**Fluxo de Dados:**
 
-**Instruções para criação do diagrama de arquitetura**  
-- **Model**: A camada que lida com a lógica de negócios e interage com o banco de dados.
-- **View**: A camada responsável pela interface de usuário.
-- **Controller**: A camada que recebe as requisições, processa as ações e atualiza o modelo e a visualização.
+1. **Cliente → Controller**
+   - O cliente faz uma requisição HTTP (GET, POST, PUT, DELETE)
+   - A requisição é recebida pelo Controller correspondente (tarefaController, labelController...)
+
+2. **Controller → Model**
+   - O Controller processa a requisição
+   - Chama os métodos apropriados do Model para acessar/modificar dados
+   - Exemplo: `tarefaController` chama `TarefaModel.criar()` para uma nova tarefa
+
+3. **Model → Banco de Dados**
+   - O Model executa operações no banco via pool de conexões
+   - Realiza validações e aplica regras de negócio
+   - Retorna os dados/resultados para o Controller
+
+4. **Controller → Cliente**
+   - O Controller formata a resposta (JSON)
+   - Envia o código HTTP apropriado 
+   - Retorna os dados para o cliente
+
+**Componentes:**
+- **Model**: Implementa a lógica de negócios e acesso ao banco PostgreSQL
+- **Controller**: Gerencia o fluxo de dados e regras de aplicação
+- **Rotas**: Define os endpoints da API REST
+- **Banco de Dados**: Armazena dados em tabelas relacionais
   
 *Adicione as setas e explicações sobre como os dados fluem entre o Model, Controller e View.*
 
-### 3.3. Wireframes (Semana 03 - opcional)
-
-*Posicione aqui as imagens do wireframe construído para sua solução e, opcionalmente, o link para acesso (mantenha o link sempre público para visualização).*
-
-### 3.4. Guia de estilos (Semana 05 - opcional)
-
-*Descreva aqui orientações gerais para o leitor sobre como utilizar os componentes do guia de estilos de sua solução.*
-
-
-### 3.5. Protótipo de alta fidelidade (Semana 05 - opcional)
-
-*Posicione aqui algumas imagens demonstrativas de seu protótipo de alta fidelidade e o link para acesso ao protótipo completo (mantenha o link sempre público para visualização).*
-
 ### 3.6. WebAPI e endpoints (Semana 05)
 
-*Utilize um link para outra página de documentação contendo a descrição completa de cada endpoint. Ou descreva aqui cada endpoint criado para seu sistema.*  
+A API possui os seguintes endpoints organizados por recurso:
+
+#### Tarefas
+* GET → `/api/tarefas` → Lista todas as tarefas
+* POST → `/api/tarefas/criar` → Cria uma nova tarefa
+* PUT → `/api/tarefas/edit/:id` → Atualiza uma tarefa existente
+* DELETE → `/api/tarefas/delete/:id` → Remove uma tarefa 
+
+#### Etiquetas
+* GET → `/api/label` → Lista todas as etiquetas
+* POST → `/api/label/criar` → Cria uma nova etiqueta
+* PUT → `/api/label/edit/:id` → Atualiza uma etiqueta
+* DELETE → `/api/label/delete/:id` → Remove uma etiqueta
+
+#### Relação Tarefas-Etiquetas
+* GET → `/api/tasks-labels/task/:task_id` → Lista etiquetas de uma tarefa
+* GET → `/api/tasks-labels/label/:label_id` → Lista tarefas com uma etiqueta
+* POST → `/api/tasks-labels` → Atribui etiqueta à tarefa
+* DELETE → `/api/tasks-labels/:task_id/:label_id` → Remove etiqueta da tarefa
+
+#### Times
+* GET → `/api/times` → Lista todos os times
+* POST → `/api/times/criar` → Cria um novo time
+* PUT → `/api/times/edit/:id` → Atualiza um time
+* DELETE → `/api/times/delete/:id` → Remove um time
+
+#### Projetos
+* GET → `/api/projetos` → Lista todos os projetos
+* POST → `/api/projetos/criar` → Cria um novo projeto
+* PUT → `/api/projetos/edit/:id` → Atualiza um projeto
+* DELETE → `/api/projetos/delete/:id` → Remove um projeto
+
+#### Usuários
+* GET → `/api/usuarios` → Lista todos os usuários
+* POST → `/api/usuarios/criar` → Cria um novo usuário
+* PUT → `/api/usuarios/edit/:id` → Atualiza um usuário
+* DELETE → `/api/usuarios/delete/:id` → Remove um usuário
+
+#### Relação Times-Projetos
+* GET → `/api/times-projetos/time/:time_id` → Lista projetos de um time
+* GET → `/api/times-projetos/projeto/:projeto_id` → Lista times de um projeto
+* POST → `/api/times-projetos` → Vincula time a projeto
+* DELETE → `/api/times-projetos/:time_id/:projeto_id` → Remove vínculo time-projeto
 
 ### 3.7 Interface e Navegação (Semana 07)
+Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.
 
-*Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.*
-
----
-
-## <a name="c4"></a>4. Desenvolvimento da Aplicação Web (Semana 8)
-
+## <a name="c3"></a>4. Desenvolvimento da Aplicação Web (Semana 8)
 ### 4.1 Demonstração do Sistema Web (Semana 8)
-
-*VIDEO: Insira o link do vídeo demonstrativo nesta seção*
-*Descreva e ilustre aqui o desenvolvimento do sistema web completo, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.*
+VIDEO: Insira o link do vídeo demonstrativo nesta seção Descreva e ilustre aqui o desenvolvimento do sistema web completo, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.
 
 ### 4.2 Conclusões e Trabalhos Futuros (Semana 8)
+Indique pontos fortes e pontos a melhorar de maneira geral. Relacione também quaisquer outras ideias que você tenha para melhorias futuras.
 
-*Indique pontos fortes e pontos a melhorar de maneira geral.*
-*Relacione também quaisquer outras ideias que você tenha para melhorias futuras.*
+## <a name="c3"></a> 5. Referências
+Incluir as principais referências de seu projeto, para que o leitor possa consultar caso ele se interessar em aprofundar.
 
-
-
-## <a name="c5"></a>5. Referências
-
-_Incluir as principais referências de seu projeto, para que o leitor possa consultar caso ele se interessar em aprofundar._<br>
-
----
----

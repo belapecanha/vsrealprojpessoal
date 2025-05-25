@@ -8,7 +8,7 @@ const projetosRoutes = require('./routes/projetosRoutes');
 const timesRoutes = require('./routes/timesRoutes');
 const timesProjetosRoutes = require('./routes/timesProjetosRoutes');
 const labelsRoutes = require('./routes/labelsRoutes');
-const labelsTasksRoutes = require('./routes/labelsTasks'); // Added this line
+const labelsTasksRoutes = require('./routes/labelsTasksRoutes');
 
 const app = express();
 const PORT = 3000;
@@ -25,7 +25,7 @@ app.use('/api', projetosRoutes);
 app.use('/api', timesRoutes);
 app.use('/api', timesProjetosRoutes);
 app.use('/api', labelsRoutes);
-app.use('/api', labelsTasksRoutes); // Added this line
+app.use('/api', labelsTasksRoutes);
 
 
 app.listen(PORT, () => {

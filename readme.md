@@ -14,13 +14,13 @@ projetopessoal-modulo2/<br>
 │    └── database.js<br>
 │<br>
 ├── controllers/<br>
-│    ├── LabelController.js<br>
-│    ├── LabelTaskController.js<br>
-│    ├── ProjetoController.js<br>
-│    ├── TarefaController.js<br>
-│    ├── TimeController.js<br>
-│    ├── TimeProjetoController.js<br>
-│    └── UsuarioController.js<br>
+│    ├── labelController.js<br>
+│    ├── labelTaskController.js<br>
+│    ├── projetoController.js<br>
+│    ├── tarefaController.js<br>
+│    ├── timeController.js<br>
+│    ├── timeProjetoController.js<br>
+│    └── usuarioController.js<br>
 │<br>
 ├── models/<br>
 │    ├── labels.js<br>
