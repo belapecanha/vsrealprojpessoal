@@ -82,7 +82,7 @@ Content-Type: application/json
 }
 
 ### editar projeto
-PUT http://localhost:3000/api/projeto/edit/4
+PUT http://localhost:3000/api/projeto/edit/5
 Content-Type: application/json
 
 {

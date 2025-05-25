@@ -5,35 +5,53 @@
 
 ---
 
-## Estrutura de Pastas
-vsrealprojpessoal/
-├── config/                
-     └── database.js
-├── controllers/           
-     └── HomeController.js
-├── models/              
-     └── User.js
-├── routes/                
-     └── index.js
-├── services/              
-     └── userService.js
-├── assets/                
-├── scripts/               
-├── styles/                
-├── tests/                 
-     └── .env.example
-     └── example.test.js
-├── .env
-├── .gitignore           
-├── jest.config.js       
-├── package-lock.json    
-├── package.json
-├── readme.md  
-├── server.js 
-├── package.jspm
-└── rest.http
-
-        
+## Estrutura de Pastas<br>
+projetopessoal-modulo2/<br>
+├── assets/<br>
+│    └── modelorelacional2.0.png<br>
+│<br>
+├── config/<br>
+│    └── database.js<br>
+│<br>
+├── controllers/<br>
+│    ├── LabelController.js<br>
+│    ├── LabelTaskController.js<br>
+│    ├── ProjetoController.js<br>
+│    ├── TarefaController.js<br>
+│    ├── TimeController.js<br>
+│    ├── TimeProjetoController.js<br>
+│    └── UsuarioController.js<br>
+│<br>
+├── models/<br>
+│    ├── labels.js<br>
+│    ├── labelsTasks.js<br>
+│    ├── projetos.js<br>
+│    ├── tarefa.js<br>
+│    ├── times.js<br>
+│    ├── timesProjetos.js<br>
+│    └── usuario.js<br>
+│<br>
+├── routes/<br>
+│    ├── labelsRoutes.js<br>
+│    ├── labelsTasksRoutes.js<br>
+│    ├── projetosRoutes.js<br>
+│    ├── tarefasRoutes.js<br>
+│    ├── timesRoutes.js<br>
+│    ├── timesProjetosRoutes.js<br>
+│    └── usuariosRoutes.js<br>
+│<br>
+├── scripts/<br>
+│    └── init.sql<br>
+│<br>
+├── tests/<br>
+│    └── api.test.http<br>
+│<br>
+├── .env<br>
+├── .gitignore<br>
+├── package.json<br>
+├── package-lock.json<br>
+├── README.md<br>
+└── server.js<br>
 
 ## Como executar o projeto localmente
 1. Clone o repositório:
@@ -50,5 +68,5 @@ node server.js
 http://localhost:3000/
 
 
-   
-   
+
+
