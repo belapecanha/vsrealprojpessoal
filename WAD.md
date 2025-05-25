@@ -23,7 +23,7 @@ O sistema proposto consiste em uma aplicação web para gerenciamento de tarefas
 
 ### 3.1. Modelagem do banco de dados  (Semana 3)
 Modelo relacional
-![Modelo Relacional](./assets/modelorelacional-vsreal.png)
+![Modelo Relacional](./assets/modelorelacional2.0.png)
 
 O modelo relacional é uma forma estruturada de organizar os dados de um banco por meio de tabelas, onde cada tabela representa uma entidade (como usuários, tarefas ou projetos), com colunas que definem os atributos e linhas que representam os registros. As tabelas se conectam por chaves primárias e estrangeiras, o que permite relacionar as informações sem repetir dados. 
 
