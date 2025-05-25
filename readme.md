@@ -8,7 +8,8 @@
 ## Estrutura de Pastas<br>
 projetopessoal-modulo2/<br>
 ├── assets/<br>
-│    └── modelorelacional2.0.png<br>
+│    └── modelorelacional-vsreal.png<br>
+│    └── Diagramadearq.jpg<br>
 │<br>
 ├── config/<br>
 │    └── database.js<br>
@@ -42,15 +43,23 @@ projetopessoal-modulo2/<br>
 │<br>
 ├── scripts/<br>
 │    └── init.sql<br>
+│    └── runSQLScripts.js<br>
 │<br>
 ├── tests/<br>
 │    └── api.test.http<br>
+│<br>
+├── services<br>
+│    └── userService.js<br>
+│<br>
+├── views<br>
+│    └── tarefas.ejs<br>
 │<br>
 ├── .env<br>
 ├── .gitignore<br>
 ├── package.json<br>
 ├── package-lock.json<br>
 ├── README.md<br>
+├── WAD.md<br>
 └── server.js<br>
 
 ## Como executar o projeto localmente
