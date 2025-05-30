@@ -1,5 +1,5 @@
 const pool = require('../config/database');
-const TimeModel = require('../models/times'); // Changed from 'time' to 'times'
+const TimeModel = require('../models/times');
 
 exports.criarTime = async (req, res) => {
   const { name_teams } = req.body;
