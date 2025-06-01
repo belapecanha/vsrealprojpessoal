@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Rota principal - mostra o quadro Kanban
-router.get('/', (req, res) => {
+router.get('/kanban', (req, res) => {
     res.render('tarefas', {
         title: 'Trackzo'
     });

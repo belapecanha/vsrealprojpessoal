@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const bcrypt = require('bcrypt');
 
 class UsuarioModel {
   // Listar todos os usuários
@@ -14,12 +15,18 @@ class UsuarioModel {
   // Criar um novo usuário
   static async create(data) {
     const { name_users, email, password } = data;
+    
+    // Hash da senha
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    
     const query = `
       INSERT INTO users (name_users, email, password)
       VALUES ($1, $2, $3)
-      RETURNING *
+      RETURNING id, name_users, email, created_at
     `;
-    const result = await pool.query(query, [name_users, email, password]);
+    
+    const result = await pool.query(query, [name_users, email, hashedPassword]);
     return result.rows[0];
   }
 
@@ -48,6 +55,16 @@ class UsuarioModel {
   // Deletar uma task
   static async delete(id) {
     await db.query('DELETE FROM users WHERE id = $1', [id]);
+  }
+
+  static async buscarPorEmail(email) {
+    const query = 'SELECT * FROM users WHERE email = $1';
+    const result = await pool.query(query, [email]);
+    return result.rows[0];
+  }
+
+  static async validarSenha(senhaPlana, senhaHash) {
+    return await bcrypt.compare(senhaPlana, senhaHash);
   }
 }
 
