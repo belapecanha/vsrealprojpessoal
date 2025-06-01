@@ -71,3 +71,19 @@ exports.excluirProjeto = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.viewProjetos = async (req, res) => {
+  try {
+    const projetos = await ProjetoModel.listarProjeto();
+    res.render('projetos', { 
+      title: 'Projetos',
+      projetos: projetos
+    });
+  } catch (error) {
+    console.error('Erro:', error);
+    res.status(500).render('error', { 
+      title: 'Erro',
+      error: 'Erro ao carregar projetos'
+    });
+  }
+};

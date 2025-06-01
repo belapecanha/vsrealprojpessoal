@@ -1,0 +1,161 @@
+/* 1. RESET E CONFIGURAÇÕES BÁSICAS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*2. LAYOUT BASE */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url('../assets/stacked-peaks.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*3. CONTAINER DE AUTENTICAÇÃO*/
+.auth-container {
+    background-color: #b40b9d;
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.5s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-container h1 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+}
+
+/*. FORMULÁRIO E CAMPOS*/
+.form-row {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    position: relative;
+}
+
+.form-group label {
+    color: #ffffff;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+/* Ícones do formulário */
+.icon-container {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+/* Campos de entrada */
+.form-group input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/*5. BOTÕES*/
+.btn-nv {
+    width: 100%;
+    padding: 12px;
+    background-color: #ffffff;
+    color: #b40b9d;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn-nv:hover {
+    background-color: #f310d4;
+    color: #ffffff;
+    box-shadow: 0 4px 8px #d100b5b8;
+
+    transform: translateY(-2px);
+}
+
+/*6. MENSAGENS DE ERRO*/
+.error {
+    background-color: rgba(255, 0, 0, 0.1);
+    border: 1px solid #ff0000;
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/*7. LINKS E TEXTOS*/
+p {
+    color: #ffffff;
+    text-align: center;
+    margin-top: 20px;
+}
+
+p a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+/*8. RESPONSIVIDADE*/
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 20px;
+    }
+
+    .auth-container h1 {
+        font-size: 2rem;
+    }
+
+    .form-group input {
+        padding: 10px 10px 10px 35px;
+    }
+}
+/*9. ANIMAÇÕES*/
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

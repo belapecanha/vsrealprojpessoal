@@ -1,5 +1,5 @@
 const pool = require('../config/database');
-const LabelModel = require('../models/labels'); // Changed from 'time' to 'times'
+const LabelModel = require('../models/labels');
 
 exports.criarLabel = async (req, res) => {
   const { name_labels, color_labels, description_labels } = req.body;
