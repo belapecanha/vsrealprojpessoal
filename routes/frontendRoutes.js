@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const TarefaController = require('../controllers/TarefaController');
+const ProjetoController = require('../controllers/ProjetoController');
+const TimeController = require('../controllers/TimeController');
+const TarefaService = require('../services/tarefaService');
 
 // Rota principal - mostra o quadro Kanban
 router.get('/kanban', TarefaController.viewTarefas);

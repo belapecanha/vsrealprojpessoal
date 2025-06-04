@@ -148,6 +148,22 @@ class TarefaModel {
     const resultado = await pool.query(query, valores);
     return resultado.rows[0];
   }
+  static async buscarPorId(id) {
+    const query = `
+      SELECT 
+        t.*,
+        u.name_users,
+        tm.name_teams,
+        p.name_projects
+      FROM tasks t
+      LEFT JOIN users u ON t.user_id = u.id
+      LEFT JOIN teams tm ON t.team_id = tm.id
+      LEFT JOIN projects p ON t.project_id = p.id
+      WHERE t.id = $1 AND t.is_deleted = FALSE`;
+
+    const resultado = await pool.query(query, [id]);
+    return resultado.rows[0];
+  }
 }
 
 module.exports = TarefaModel;
