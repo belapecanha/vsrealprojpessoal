@@ -2,20 +2,34 @@ const pool = require('../config/database');
 const ProjetoModel = require('../models/projetos');
 
 exports.criarProjeto = async (req, res) => {
-  const { name_projects, description_projects, color_projects } = req.body;
-
-  const query = `
-    INSERT INTO projects (name_projects, description_projects, color_projects)
-    VALUES ($1, $2, $3)
-    RETURNING *`;
-  const values = [name_projects, description_projects, color_projects];
-
   try {
-    const result = await pool.query(query, values);
-    const projeto = result.rows[0];
-    res.status(201).json(projeto);
+    const { name_projects, description_projects, color_projects } = req.body;
+    
+    // Validação básica
+    if (!name_projects || name_projects.trim() === '') {
+      return res.status(400).json({ error: 'Nome do projeto é obrigatório' });
+    }
+    
+    const projeto = await ProjetoModel.criar({
+      name_projects,
+      description_projects,
+      color_projects
+    });
+    
+    if (req.xhr || req.headers.accept?.includes('application/json')) {
+      return res.status(201).json(projeto);
+    }
+    
+    res.redirect('/kanban');
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Erro ao criar projeto:', err);
+    if (req.xhr || req.headers.accept?.includes('application/json')) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.render('novo-projeto', { 
+      title: 'Novo Projeto',
+      error: err.message
+    });
   }
 };
 

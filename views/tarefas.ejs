@@ -1,63 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>tarefas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trackzo - Gerenciador de Tarefas</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="https://kit.fontawesome.com/cef1d5a932.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <h1>Cadastro de Tarefas</h1>
+    <!-- Cabeçalho -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-tasks"></i>
+                <h1>Trackzo</h1>
+            </div>
+            <nav class="nav">
+                <button onclick="window.location.href='/tarefa/nova'" class="btn-nv">
+                <i class="fas fa-plus-circle"></i> Nova Tarefa
+                </button>
+            </nav>
+        </div>
+    </header>
 
-  <!-- Formulário para adicionar tarefa -->
-  <form action="/tarefas" method="POST">
-    <input name="title_tasks" placeholder="Título da tarefa" required>
-    <input name="description_tasks" placeholder="Descrição da tarefa" required>
+    <!-- Conteúdo Principal -->
+    <main class="main">
+        <div class="container">
+            <!-- Título da Página -->
+            <div class="page-header">
+                <h2>Kanban</h2>
+                <p>Organize suas tarefas de forma visual e eficiente</p>
+            </div>
 
-    <!-- Campos ENUM -->
-    <select name="status" required>
-      <option value="Pendente">Pendente</option>
-      <option value="Em andamento">Em andamento</option>
-      <option value="Concluída">Concluída</option>
-    </select>
+            <!-- Quadro Kanban -->
+            <div class="kanban-board">
+                <!-- Coluna: A Fazer -->
+                <div class="kanban-coluna" data-status="Pendente">
+                <div class="coluna-header">
+                    <h3><i class="fas fa-clipboard-list"></i> Pendente</h3>
+                     <span class="contador-task" id="count-pendente"><%= tarefas.filter(t => t.status === 'Pendente').length %></span>
+                </div>
+                    <div class="tasks-container"id="pendente-tarefas">
+                        <% tarefas.filter(t => t.status === 'Pendente').forEach(tarefas => { %>
+                        <div class="task-card">
+                            <h4><%= tarefas.title_tasks %></h4>
+                            <p><%= tarefas.description_tasks %></p>
+                            <div class="task-actions">
+                                <button onclick="window.location.href='/tarefa/editar/<%= tarefas.id %>'"class="btn-edit">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                            <button onclick="marcarFazendo('<%= tarefas.id %>')"class="btn-complete">
+                                <i class="fas fa-check"></i> Em andamento
+                            </button>
+                            <button onclick="marcarConcluida('<%= tarefas.id %>')"class="btn-complete">
+                                <i class="fas fa-check"></i> Concluir
+                            </button>
+                            </div>
+                        </div>
+                    <% }) %>
+                    </div>
+                <!-- Coluna: Em Progresso -->
+                <div class="kanban-coluna" data-status="Em andamento">
+                <div class="coluna-header">
+                    <h3><i class="fas fa-spinner"></i> Em Progresso</h3>
+                    <span class="contador-task"><%= tarefas.filter(t => t.status === 'Em andamento').length %></span>
+                </div>
+                <div class="tarefa-container" id="emandamento">
+                    <% tarefas.filter(t => t.status === 'Em andamento').forEach(tarefas => { %>
+                    <div class="task-card">
+                        <h4><%= tarefas.title_tasks %></h4>
+                        <p><%= tarefas.description_tasks %></p>
+                    </div>
+                    <% }) %>
+                </div>
+                </div>
 
-    <select name="priority" required>
-      <option value="Baixa">Baixa</option>
-      <option value="Média">Média</option>
-      <option value="Alta">Alta</option>
-    </select>
+                <!-- Coluna: Concluído -->
+                <div class="kanban-coluna" data-status="Concluída">
+                <div class="coluna-header">
+                    <h3><i class="fas fa-check-circle"></i> Concluído</h3>
+                    <span class="contador-task"><%= tarefas.filter(t => t.status === 'Concluída').length %></span>
+                </div>
+                <div class="tasks-container" id="concluido-tarefas">
+                    <% tarefas.filter(t => t.status === 'Concluída').forEach(tarefas => { %>
+                    <div class="task-card">
+                        <h4><%= tarefas.title_tasks %></h4>
+                        <p><%= tarefas.description_tasks %></p>
+                    </div>
+                    <% }) %>
+                </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Atualiza os contadores de tarefas
+                const contadorPendente = document.getElementById('count-pendente');
+                const contadorEmAndamento = document.querySelector('.kanban-coluna[data-status="Em andamento"] .contador-task');
+                const contadorConcluida = document.querySelector('.kanban-coluna[data-status="Concluída"] .contador-task');
 
-    <button type="submit">Adicionar</button>
-  </form>
+                contadorPendente.textContent = document.querySelectorAll('#pendente-tarefas .task-card').length;
+                contadorEmAndamento.textContent = document.querySelectorAll('#emandamento .task-card').length;
+                contadorConcluida.textContent = document.querySelectorAll('#concluido-tarefas .task-card').length;
+            });
 
-  <hr>
+            // Função para marcar tarefa como concluída
+            function marcarConcluida(id) {
+                fetch(`/api/tarefas/edit/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        status: 'Concluída'
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        throw new Error('Erro ao atualizar tarefa');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao marcar tarefa como concluída');
+                });
+            }
+            function marcarFazendo(id) {
+                fetch(`/api/tarefas/edit/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        status: 'Em andamento'
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        throw new Error('Erro ao atualizar tarefa');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao marcar tarefa como em andamento');
+                });
+            }
+        </script>    
+</main>
 
-  <h2>Lista de Tarefas</h2>
-  <% tarefas.forEach(tarefa => { %>
-    <!-- Formulário para editar tarefa -->
-    <form action="/tarefas/edit/<%= tarefa.id %>" method="POST" style="display:inline;">
-      <input name="title_tasks" value="<%= tarefa.title_tasks %>" required>
-      <input name="description_tasks" value="<%= tarefa.description_tasks %>" required>
-
-      <!-- ENUMs para editar -->
-      <select name="status" required>
-        <option value="Pendente" <%= tarefa.status === 'Pendente' ? 'selected' : '' %>>Pendente</option>
-        <option value="Em andamento" <%= tarefa.status === 'Em andamento' ? 'selected' : '' %>>Em andamento</option>
-        <option value="Concluída" <%= tarefa.status === 'Concluída' ? 'selected' : '' %>>Concluída</option>
-      </select>
-
-      <select name="priority" required>
-        <option value="Baixa" <%= tarefa.priority === 'Baixa' ? 'selected' : '' %>>Baixa</option>
-        <option value="Média" <%= tarefa.priority === 'Média' ? 'selected' : '' %>>Média</option>
-        <option value="Alta" <%= tarefa.priority === 'Alta' ? 'selected' : '' %>>Alta</option>
-      </select>
-
-      <button type="submit">✏️</button>
-    </form>
-
-    <!-- Exclusão lógica da tarefa -->
-    <form action="/tarefas/delete/<%= tarefa.id %>" method="POST" style="display:inline;">
-      <button type="submit" onclick="return confirm('Tem certeza que deseja excluir a tarefa?')">🗑️</button>
-    </form>
-    <br>
-  <% }) %>
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Trackzo</h4>
+                    <p>Gerenciador de tarefas moderno e eficiente</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li>Quadro Kanban</li>
+                        <li>Gestão de Projetos</li>
+                        <li>Organização por Times</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-envelope"></i> contato@trackzo.com</p>
+                    <p><i class="fas fa-phone"></i> (11) 9999-9999</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Trackzo. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
+

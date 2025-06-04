@@ -45,10 +45,20 @@ class ProjetoModel {
     return resultado.rows[0];
   }
 
-  // Deletar um projeto
+  // Corrigido método delete para retornar o resultado
   static async delete(id) {
-    await db.query('DELETE FROM projects WHERE id = $1', [id]);
+    const query = `DELETE FROM projects WHERE id = $1 RETURNING *`;
+    const result = await pool.query(query, [id]);
+    return result.rows[0];
+  }
+
+  static async buscarPorId(id) {
+    const query = `
+      SELECT * FROM projects 
+      WHERE id = $1 AND is_deleted = FALSE
+    `;
+    const result = await pool.query(query, [id]);
+    return result.rows[0];
   }
 }
-
 module.exports = ProjetoModel;

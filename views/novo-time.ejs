@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Novo Time - Trackzo</title>
+    <link rel="stylesheet" href="/css/forms.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-tasks"></i>
+                <h1>Trackzo</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="/kanban" class="nav-link"><i class="fas fa-columns"></i> Kanban</a>
+                <a href="/tarefa/nova" class="nav-link"><i class="fas fa-plus"></i> Nova Tarefa</a>
+                <a href="/projeto/novo" class="nav-link"><i class="fas fa-project-diagram"></i> Novo Projeto</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="form-container">
+            <nav class="breadcrumb">
+                <a href="/kanban"><i class="fas fa-columns"></i> Kanban</a>
+                <span class="separator">/</span>
+                <span class="current">Novo Time</span>
+            </nav>
+
+            <div class="page-header">
+                <h2>Criar Novo Time</h2>
+                <p>Preencha os detalhes do seu novo time</p>
+            </div>
+
+            <form class="team-form" action="/time/criar" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-users"></i> Nome do Time</label>
+                        <input type="text" id="name" name="name_teams" required placeholder="Digite o nome do time">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="description"><i class="fas fa-align-left"></i> Descrição</label>
+                        <textarea id="description" name="description" placeholder="Descreva o time"></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="members"><i class="fas fa-user-plus"></i> Membros do Time</label>
+                        <input type="text" id="members" name="members" placeholder="Digite os IDs dos membros (ex: 1,2,3)">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancelar" onclick="window.location.href='/kanban'">Cancelar</button>
+                    <button type="submit" class="btn-nv">Criar Time</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h4>Trackzo</h4>
+                <p>Gerenciador de tarefas moderno e eficiente</p>
+            </div>
+            <div class="footer-section">
+                <h4>Recursos</h4>
+                <ul>
+                    <li>Quadro Kanban</li>
+                    <li>Gestão de Projetos</li>
+                    <li>Organização por Times</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contato</h4>
+                <p>contato@trackzo.com</p>
+                <p>(11) 9999-9999</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Trackzo. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
