@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const tarefaController = require('../controllers/tarefaController');
+const tarefaController = require('../controllers/TarefaController');
 const pool = require('../config/database'); 
 
 // Listar tarefas e renderizar a página
