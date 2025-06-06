@@ -1,18 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const projetoController = require('../controllers/projetoController');
-const pool = require('../config/database'); 
+const projetoController = require('../controllers/ProjetoController');
 
-// Listar tarefas e renderizar a página
-router.get('/projeto', projetoController.listarProjeto);
-
-// Criar tarefa
-router.post('/projeto/criar', projetoController.criarProjeto);
-
-// Editar tarefa
-router.put('/projeto/edit/:id', projetoController.editarProjeto);
-
-// "Excluir" tarefa 
-router.delete('/projeto/delete/:id', projetoController.excluirProjeto);
+router.get('/api/projetos', projetoController.listarProjetos);
+router.post('/api/projetos/criar', projetoController.criarProjeto);
+router.put('/api/projetos/edit/:id', projetoController.editarProjeto);
+router.delete('/api/projetos/delete/:id', projetoController.excluirProjeto);
 
 module.exports = router;

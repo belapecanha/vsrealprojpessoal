@@ -1,13 +1,15 @@
+// authController.js (após correção)
 const Usuario = require('../models/usuario');
-const { criarUsuario } = require('./usuariosController');
+const bcrypt = require('bcrypt'); 
 
 class AuthController {
     static async renderLogin(req, res) {
-        res.render('auth/login', { error: null });
+        res.render('login', { error: null }); 
     }
 
     static async renderCadastro(req, res) {
-        res.render('auth/cadastro', { error: null });
+        res.render('cadastro', { error: null }); 
+
     }
 
     static async cadastrar(req, res) {
@@ -15,26 +17,27 @@ class AuthController {
             const { name_users, email, password } = req.body;
             
             if (!name_users || !email || !password) {
-                return res.render('auth/cadastro', {
+
+                return res.render('cadastro', {
                     error: 'Todos os campos são obrigatórios'
                 });
             }
 
-            // Verifica se usuário já existe
             const usuarioExistente = await Usuario.buscarPorEmail(email);
             if (usuarioExistente) {
-                return res.render('auth/cadastro', { 
+                return res.render('cadastro', { 
                     error: 'Email já cadastrado' 
                 });
             }
 
-            // Cria novo usuário usando o modelo diretamente
-            await Usuario.create({ name_users, email, password });
+            const hashedPassword = await bcrypt.hash(password, 10);
+            await Usuario.create({ name_users, email, password: hashedPassword });
             
             res.redirect('/kanban');
         } catch (error) {
             console.error('Erro ao cadastrar:', error);
-            res.render('auth/cadastro', { 
+            res.render('cadastro', { 
+
                 error: 'Erro ao cadastrar usuário' 
             });
         }
@@ -44,31 +47,41 @@ class AuthController {
         try {
             const { email, password } = req.body;
             
-            // Busca usuário
             const usuario = await Usuario.buscarPorEmail(email);
             if (!usuario) {
-                return res.render('auth/login', { 
+                return res.render('login', { 
+
                     error: 'Usuário não encontrado' 
                 });
             }
 
-            // Valida senha
             const senhaValida = await Usuario.validarSenha(password, usuario.password);
             if (!senhaValida) {
-                return res.render('auth/login', { 
+                return res.render('login', { 
+
                     error: 'Senha incorreta' 
                 });
             }
 
-            // Cria sessão
             req.session.userId = usuario.id;
             res.redirect('/kanban');
         } catch (error) {
             console.error(error);
-            res.render('auth/login', { 
+            res.render('login', { 
+
                 error: 'Erro ao fazer login' 
             });
         }
+    }
+
+    static async logout(req, res) {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Erro ao fazer logout:', err);
+                return res.render('login', { error: 'Erro ao fazer logout' }); 
+            }
+            res.redirect('/login');
+        });
     }
 }
 

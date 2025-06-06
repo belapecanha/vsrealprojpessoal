@@ -6,7 +6,8 @@
     <title>Trackzo</title>
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="/styles/forms.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/cef1d5a932.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
     <!-- Cabeçalho -->
@@ -20,7 +21,8 @@
             </div>
             <nav class="nav">
                 <div class="nav-links">
-                    <a href="/" class="nav-link">
+                    <a href="/kanban" class="nav-link">
+
                         <i class="fas fa-columns"></i>
                         Kanban
                     </a>
@@ -40,26 +42,28 @@
     <!-- Conteúdo Principal -->
     <main class="main">
         <div class="container">
-            <div class="page-header">
+            <div class="form-container">
+                <div class="page-header">
+
                 <div class="breadcrumb">
                     <a href="/kanban"><i class="fas fa-home"></i> Kanban</a>
                     <span class="separator">/</span>
                     <span class="current">Novo projeto</span>
                 </div>
-                <h2><i class="fas fa-plus-circle"></i> Criar Nova Tarefa</h2>
-                <p>Preencha os detalhes da sua nova tarefa</p>
-            </div>
+                <h2><i class="fas fa-plus-circle"></i> Criar novo projeto</h2>
+                <p>Preencha os detalhes da seu projeto</p>
+                </div>
+                 <form class="task-form" action="/api/projetos/criar" method="POST">
 
-            <div class="form-container">
-                <form class="task-form" id="nova-tarefa-form" >
                     <div class="form-row">
                         <div class="form-group full-width">
                             <label for="task-title">
                                 <i class="fas fa-heading"></i>
                                 Título do projeto
                             </label>
-                            <input type="text" id="task-title" required placeholder="Digite o nome do projeto">
-                        </div>
+                            <input type="text" id="name_projects" name= "name_projects" required placeholder="Digite o nome do projeto">
+                        </div> 
+
                     </div>
 
                     <div class="form-row">
@@ -68,26 +72,10 @@
                                 <i class="fas fa-align-left"></i>
                                 Descrição
                             </label>
-                            <textarea id="task-description" rows="4" placeholder="Descreva os detalhes do projeto (opcional)"></textarea>
+                            <textarea id="description_projects" name="description_projects"  placeholder="Descreva os detalhes do projeto (opcional)"></textarea>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label for="task-team">
-                                <i class="fas fa-users"></i>
-                                Time Responsável
-                            </label>
-                            <div class="input-with-button">
-                                <select id="task-team">
-                                    <option value="">Selecione um time</option>
-                                    <option value="Desenvolvimento">ex</option>
 
-                                </select>
-                                <button type="button" class="btn-icon" onclick="window.location.href='/time/novo'" title="Criar novo time">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
                     <div class="form-actions">
                         <button type="button" class="btn-cancelar" onclick="window.location.href='/'">
                             <i class="fas fa-times"></i>

@@ -134,26 +134,30 @@ body {
 
 .page-header h2 {
   font-size: 40px;
-  color: #ffffff;
+  color: #000000;
   margin-bottom: 0.5rem;
 }
 
 .page-header p {
   font-size: 18px;
-  color: #ffffff;
+  color: #000000;
 }
 
 /* Quadro Kanban */
 .kanban-board {
-  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  display: flex;
+  gap: 2px; 
+  flex-wrap: nowrap;
+
   margin-top: 2rem;
   padding: 0 1rem;
   animation: slideIn 0.5s ease;
 }
 
 .kanban-coluna {
+  flex: 1;
+
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -198,12 +202,14 @@ body {
 
 /* Cartões de Tarefa */
 .task-card {
-  background: white;
+  background: rgb(240, 205, 255);
+
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #007bff;
+  border-left: 4px solid #ff00fb;
+
   cursor: move;
   transition: all 0.3s ease;
   position: relative;

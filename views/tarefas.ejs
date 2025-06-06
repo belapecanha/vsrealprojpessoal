@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trackzo - Gerenciador de Tarefas</title>
     <link rel="stylesheet" href="styles/styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/cef1d5a932.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
     <!-- Cabeçalho -->
@@ -35,40 +36,122 @@
             <!-- Quadro Kanban -->
             <div class="kanban-board">
                 <!-- Coluna: A Fazer -->
-                <div class="kanban-coluna" data-status="todo">
-                    <div class="coluna-header">
-                        <h3><i class="fas fa-clipboard-list"></i> A Fazer</h3>
-                        <span class="contador-task">0</span>
-                    </div>
-                    <div class="tasks-container" id="afazer-tarefas">
-                        <!-- Tarefas serão inseridas aqui via JavaScript -->
-                    </div>
+                <div class="kanban-coluna" data-status="Pendente">
+                <div class="coluna-header">
+                    <h3><i class="fas fa-clipboard-list"></i> Pendente</h3>
+                     <span class="contador-task" id="count-pendente"><%= tarefas.filter(t => t.status === 'Pendente').length %></span>
                 </div>
-
+                    <div class="tasks-container"id="pendente-tarefas">
+                        <% tarefas.filter(t => t.status === 'Pendente').forEach(tarefas => { %>
+                        <div class="task-card">
+                            <h4><%= tarefas.title_tasks %></h4>
+                            <p><%= tarefas.description_tasks %></p>
+                            <div class="task-actions">
+                                <button onclick="window.location.href='/tarefa/editar/<%= tarefas.id %>'"class="btn-edit">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                            <button onclick="marcarFazendo('<%= tarefas.id %>')"class="btn-complete">
+                                <i class="fas fa-check"></i> Em andamento
+                            </button>
+                            <button onclick="marcarConcluida('<%= tarefas.id %>')"class="btn-complete">
+                                <i class="fas fa-check"></i> Concluir
+                            </button>
+                            </div>
+                        </div>
+                    <% }) %>
+                    </div>
                 <!-- Coluna: Em Progresso -->
-                <div class="kanban-coluna" data-status="progress">
-                    <div class="coluna-header">
-                        <h3><i class="fas fa-spinner"></i> Em Progresso</h3>
-                        <span class="contador-task">0</span>
+                <div class="kanban-coluna" data-status="Em andamento">
+                <div class="coluna-header">
+                    <h3><i class="fas fa-spinner"></i> Em Progresso</h3>
+                    <span class="contador-task"><%= tarefas.filter(t => t.status === 'Em andamento').length %></span>
+                </div>
+                <div class="tarefa-container" id="emandamento">
+                    <% tarefas.filter(t => t.status === 'Em andamento').forEach(tarefas => { %>
+                    <div class="task-card">
+                        <h4><%= tarefas.title_tasks %></h4>
+                        <p><%= tarefas.description_tasks %></p>
                     </div>
-                    <div class="tasks-container" id="fazendo-tarefas">
-                        <!-- Tarefas serão inseridas aqui via JavaScript -->
-                    </div>
+                    <% }) %>
+                </div>
                 </div>
 
                 <!-- Coluna: Concluído -->
-                <div class="kanban-coluna" data-status="done">
-                    <div class="coluna-header">
-                        <h3><i class="fas fa-check-circle"></i> Concluído</h3>
-                        <span class="contador-task">0</span>
+                <div class="kanban-coluna" data-status="Concluída">
+                <div class="coluna-header">
+                    <h3><i class="fas fa-check-circle"></i> Concluído</h3>
+                    <span class="contador-task"><%= tarefas.filter(t => t.status === 'Concluída').length %></span>
+                </div>
+                <div class="tasks-container" id="concluido-tarefas">
+                    <% tarefas.filter(t => t.status === 'Concluída').forEach(tarefas => { %>
+                    <div class="task-card">
+                        <h4><%= tarefas.title_tasks %></h4>
+                        <p><%= tarefas.description_tasks %></p>
                     </div>
-                    <div class="tasks-container" id="concluido-tarefas">
-                        <!-- Tarefas serão inseridas aqui via JavaScript -->
-                    </div>
+                    <% }) %>
+                </div>
                 </div>
             </div>
         </div>
-    </main>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Atualiza os contadores de tarefas
+                const contadorPendente = document.getElementById('count-pendente');
+                const contadorEmAndamento = document.querySelector('.kanban-coluna[data-status="Em andamento"] .contador-task');
+                const contadorConcluida = document.querySelector('.kanban-coluna[data-status="Concluída"] .contador-task');
+
+                contadorPendente.textContent = document.querySelectorAll('#pendente-tarefas .task-card').length;
+                contadorEmAndamento.textContent = document.querySelectorAll('#emandamento .task-card').length;
+                contadorConcluida.textContent = document.querySelectorAll('#concluido-tarefas .task-card').length;
+            });
+
+            // Função para marcar tarefa como concluída
+            function marcarConcluida(id) {
+                fetch(`/api/tarefas/edit/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        status: 'Concluída'
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        throw new Error('Erro ao atualizar tarefa');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao marcar tarefa como concluída');
+                });
+            }
+            function marcarFazendo(id) {
+                fetch(`/api/tarefas/edit/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        status: 'Em andamento'
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        throw new Error('Erro ao atualizar tarefa');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao marcar tarefa como em andamento');
+                });
+            }
+        </script>    
+</main>
 
     <!-- Rodapé -->
     <footer class="footer">
@@ -98,6 +181,6 @@
         </div>
     </footer>
 
-
 </body>
 </html>
+

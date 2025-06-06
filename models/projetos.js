@@ -12,14 +12,14 @@ class ProjetoModel {
   }
 
   // Criar um novo projeto
-  static async create(data) {
-    const { name_projects, description_projects, color_projects } = data;
+  static async criar(data) {
+    const { name_projects, description_projects } = data;
     const query = `
-      INSERT INTO projects (name_projects, description_projects, color_projects)
-      VALUES ($1, $2, $3)
+      INSERT INTO projects (name_projects, description_projects)
+      VALUES ($1, $2)
       RETURNING *
     `;
-    const result = await pool.query(query, [name_projects, description_projects, color_projects]);
+    const result = await pool.query(query, [name_projects, description_projects]);
     return result.rows[0];
   }
 
@@ -45,10 +45,20 @@ class ProjetoModel {
     return resultado.rows[0];
   }
 
-  // Deletar um projeto
+  // Corrigido método delete para retornar o resultado
   static async delete(id) {
-    await db.query('DELETE FROM projects WHERE id = $1', [id]);
+    const query = `DELETE FROM projects WHERE id = $1 RETURNING *`;
+    const result = await pool.query(query, [id]);
+    return result.rows[0];
+  }
+
+  static async buscarPorId(id) {
+    const query = `
+      SELECT * FROM projects 
+      WHERE id = $1 AND is_deleted = FALSE
+    `;
+    const result = await pool.query(query, [id]);
+    return result.rows[0];
   }
 }
-
 module.exports = ProjetoModel;
