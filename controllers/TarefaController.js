@@ -35,12 +35,15 @@ exports.criarTarefa = async (req, res) => {
       projetos: await ProjetoModel.findAll(),
       times: await TimeModel.findAll()
     });
+
   }
 };
 
 exports.listarTarefas = async (req, res) => {
   try {
+
     const tarefas = await TarefaService.listarTarefas(req.session.userId);
+
     res.status(200).json(tarefas);
   } catch (err) {
     console.error('Erro ao listar tarefas:', err);
@@ -71,6 +74,7 @@ exports.editarTarefa = async (req, res) => {
       return res.status(200).json(tarefa);
     }
     res.redirect('/kanban');
+
   } catch (err) {
     console.error('Erro ao atualizar tarefa:', err);
     const projetos = await ProjetoModel.findAll();
@@ -89,6 +93,7 @@ exports.excluirTarefa = async (req, res) => {
   const { id } = req.params;
   try {
     const tarefa = await TarefaService.excluirTarefa(id, req.session.userId);
+
     if (!tarefa) {
       return res.status(404).json({ message: 'Tarefa não encontrada' });
     }
@@ -119,6 +124,7 @@ exports.viewTarefas = async (req, res) => {
       tarefas: [],
       projetos: await ProjetoModel.findAll(),
       times: await TimeModel.findAll(),
+
       error: 'Erro ao carregar tarefas'
     });
   }
@@ -152,3 +158,4 @@ exports.viewEditar = async (req, res) => {
     });
   }
 };
+

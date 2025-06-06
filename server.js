@@ -5,6 +5,9 @@ const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
 
+const TarefaModel = require('./models/tarefa');
+
+// Import all routes
 const tarefasRoutes = require('./routes/tarefasRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const projetosRoutes = require('./routes/projetosRoutes');
@@ -18,6 +21,7 @@ const frontendRoutes = require('./routes/frontendRoutes');
 
 
 const app = express();
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,6 +41,7 @@ app.use(session({
   }));
 
 // Rotas
+
 app.use('/api', tarefasRoutes);
 app.use('/api', usuarioRoutes);
 app.use('/', projetosRoutes);
@@ -47,6 +52,7 @@ app.use('/api', labelsTasksRoutes);
 app.use('/auth', authRoutes);
 app.use('/', frontendRoutes);
 
+
 // Rota raiz
 app.get('/', (req, res) => {
     res.redirect('/auth/login');
@@ -56,4 +62,6 @@ const PORT = 3000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+
 });
+

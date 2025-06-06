@@ -21,6 +21,7 @@ class UsuarioModel {
         return result.rows[0] || null;
     }
 
+
     static async validarSenha(senha, hash) {
         return await bcrypt.compare(senha, hash);
     }

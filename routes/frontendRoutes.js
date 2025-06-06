@@ -29,6 +29,7 @@ router.get('/tarefa/nova', async (req, res) => {
             error: 'Erro ao carregar dados do formulário'
         });
     }
+
 });
 // Rota para o formulário de novo projeto
 router.get('/projeto/novo', (req, res) => {

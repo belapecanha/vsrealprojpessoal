@@ -176,4 +176,5 @@ class TarefaModel {
   }
 }
 
+
 module.exports = TarefaModel;

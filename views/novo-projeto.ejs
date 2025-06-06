@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="/styles/forms.css">
     <script src="https://kit.fontawesome.com/cef1d5a932.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
     <!-- Cabeçalho -->
@@ -21,6 +22,7 @@
             <nav class="nav">
                 <div class="nav-links">
                     <a href="/kanban" class="nav-link">
+
                         <i class="fas fa-columns"></i>
                         Kanban
                     </a>
@@ -42,6 +44,7 @@
         <div class="container">
             <div class="form-container">
                 <div class="page-header">
+
                 <div class="breadcrumb">
                     <a href="/kanban"><i class="fas fa-home"></i> Kanban</a>
                     <span class="separator">/</span>
@@ -51,6 +54,7 @@
                 <p>Preencha os detalhes da seu projeto</p>
                 </div>
                  <form class="task-form" action="/api/projetos/criar" method="POST">
+
                     <div class="form-row">
                         <div class="form-group full-width">
                             <label for="task-title">
@@ -59,6 +63,7 @@
                             </label>
                             <input type="text" id="name_projects" name= "name_projects" required placeholder="Digite o nome do projeto">
                         </div> 
+
                     </div>
 
                     <div class="form-row">
@@ -70,6 +75,7 @@
                             <textarea id="description_projects" name="description_projects"  placeholder="Descreva os detalhes do projeto (opcional)"></textarea>
                         </div>
                     </div>
+
                     <div class="form-actions">
                         <button type="button" class="btn-cancelar" onclick="window.location.href='/'">
                             <i class="fas fa-times"></i>

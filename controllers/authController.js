@@ -9,6 +9,7 @@ class AuthController {
 
     static async renderCadastro(req, res) {
         res.render('cadastro', { error: null }); 
+
     }
 
     static async cadastrar(req, res) {
@@ -16,6 +17,7 @@ class AuthController {
             const { name_users, email, password } = req.body;
             
             if (!name_users || !email || !password) {
+
                 return res.render('cadastro', {
                     error: 'Todos os campos são obrigatórios'
                 });
@@ -35,6 +37,7 @@ class AuthController {
         } catch (error) {
             console.error('Erro ao cadastrar:', error);
             res.render('cadastro', { 
+
                 error: 'Erro ao cadastrar usuário' 
             });
         }
@@ -47,6 +50,7 @@ class AuthController {
             const usuario = await Usuario.buscarPorEmail(email);
             if (!usuario) {
                 return res.render('login', { 
+
                     error: 'Usuário não encontrado' 
                 });
             }
@@ -54,6 +58,7 @@ class AuthController {
             const senhaValida = await Usuario.validarSenha(password, usuario.password);
             if (!senhaValida) {
                 return res.render('login', { 
+
                     error: 'Senha incorreta' 
                 });
             }
@@ -63,6 +68,7 @@ class AuthController {
         } catch (error) {
             console.error(error);
             res.render('login', { 
+
                 error: 'Erro ao fazer login' 
             });
         }
