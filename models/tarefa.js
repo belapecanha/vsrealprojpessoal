@@ -48,8 +48,18 @@ class TarefaModel {
         label_id
       } = dados;
 
-      // Validar relações antes de criar
-      await this.validarRelacoes(user_id, team_id, project_id, label_id);
+
+      const sanitizedTeamId = team_id === '' ? null : team_id;
+      const sanitizedProjectId = project_id === '' ? null : project_id;
+      const sanitizedLabelId = label_id === '' ? null : label_id;
+
+      // Validar relações 
+      await this.validarRelacoes(
+        user_id, 
+        sanitizedTeamId, 
+        sanitizedProjectId, 
+        sanitizedLabelId
+      );
 
       // Criar a tarefa
       const queryTarefa = `
@@ -71,18 +81,18 @@ class TarefaModel {
         status, 
         priority,
         user_id,
-        team_id,
-        project_id
+        sanitizedTeamId,
+        sanitizedProjectId
       ];
 
       const resultadoTarefa = await client.query(queryTarefa, valores);
       const tarefa = resultadoTarefa.rows[0];
 
-      // Se houver label_id, criar a relação na tabela de junção
-      if (label_id) {
+
+      if (sanitizedLabelId) {
         await client.query(
           'INSERT INTO task_labels (task_id, label_id) VALUES ($1, $2)',
-          [tarefa.id, label_id]
+          [tarefa.id, sanitizedLabelId]
         );
       }
 

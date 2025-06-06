@@ -12,14 +12,14 @@ class ProjetoModel {
   }
 
   // Criar um novo projeto
-  static async create(data) {
-    const { name_projects, description_projects, color_projects } = data;
+  static async criar(data) {
+    const { name_projects, description_projects } = data;
     const query = `
-      INSERT INTO projects (name_projects, description_projects, color_projects)
-      VALUES ($1, $2, $3)
+      INSERT INTO projects (name_projects, description_projects)
+      VALUES ($1, $2)
       RETURNING *
     `;
-    const result = await pool.query(query, [name_projects, description_projects, color_projects]);
+    const result = await pool.query(query, [name_projects, description_projects]);
     return result.rows[0];
   }
 

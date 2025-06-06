@@ -3,8 +3,9 @@ const ProjetoModel = require('../models/projetos');
 
 exports.criarProjeto = async (req, res) => {
   try {
-    const { name_projects, description_projects, color_projects } = req.body;
-    
+    const { name_projects, description_projects, team_id } = req.body;
+
+
     // Validação básica
     if (!name_projects || name_projects.trim() === '') {
       return res.status(400).json({ error: 'Nome do projeto é obrigatório' });
@@ -13,20 +14,27 @@ exports.criarProjeto = async (req, res) => {
     const projeto = await ProjetoModel.criar({
       name_projects,
       description_projects,
-      color_projects
+      team_id
     });
-    
+
+    // Se for uma requisição AJAX/API, retorna JSON
     if (req.xhr || req.headers.accept?.includes('application/json')) {
-      return res.status(201).json(projeto);
+      return res.status(201).json({ 
+        success: true, 
+        message: 'Projeto criado com sucesso',
+        projeto 
+      });
     }
-    
+
+    // Se for uma requisição normal do navegador, redireciona
     res.redirect('/kanban');
+
   } catch (err) {
     console.error('Erro ao criar projeto:', err);
     if (req.xhr || req.headers.accept?.includes('application/json')) {
       return res.status(500).json({ error: err.message });
     }
-    res.render('novo-projeto', { 
+    res.status(500).render('novo-projeto', { 
       title: 'Novo Projeto',
       error: err.message
     });
@@ -34,12 +42,14 @@ exports.criarProjeto = async (req, res) => {
 };
 
 // Listar todas as tarefas
-exports.listarProjeto = async (req, res) => {
+exports.listarProjetos = async (req, res) => {
   try {
-    const projeto = await ProjetoModel.findAll();
-    res.status(200).json(projeto);
+    const projetos = await ProjetoModel.findAll();
+    console.log('Projetos encontrados:', projetos);
+    return projetos;
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Erro ao listar projetos:', err);
+    throw err;
   }
 };
 

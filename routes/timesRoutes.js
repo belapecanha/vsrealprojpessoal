@@ -1,18 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const timeController = require('../controllers/timeController');
-const pool = require('../config/database'); 
+const timeController = require('../controllers/TimeController');
 
-// Listar tarefas e renderizar a página
-router.get('/time', timeController.listarTime);
-
-// Criar tarefa
+// Update routes to match form actions
+router.get('/times', timeController.listarTimes);
 router.post('/time/criar', timeController.criarTime);
-
-// Editar tarefa
 router.put('/time/edit/:id', timeController.editarTime);
-
-// "Excluir" tarefa 
 router.delete('/time/delete/:id', timeController.excluirTime);
 
 module.exports = router;

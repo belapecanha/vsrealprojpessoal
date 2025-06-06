@@ -13,19 +13,20 @@ router.get('/tarefa/nova', async (req, res) => {
     try {
         const projetos = await ProjetoController.listarProjetos();
         const times = await TimeController.listarTimes();
+        
         res.render('nova-tarefa', {
             title: 'Nova Tarefa',
-            projetos: projetos,
-            times: times,
+            projetos,
+            times,
             error: null
         });
     } catch (error) {
-        console.error('Erro ao carregar formulário de nova tarefa:', error);
-        res.render('nova-tarefa', {
+        console.error('Erro ao carregar formulário:', error);
+        res.status(500).render('nova-tarefa', {
             title: 'Nova Tarefa',
             projetos: [],
             times: [],
-            error: 'Erro ao carregar dados'
+            error: 'Erro ao carregar dados do formulário'
         });
     }
 });

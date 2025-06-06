@@ -1,71 +1,79 @@
 const pool = require('../config/database');
-const TimeModel = require('../models/times'); // Changed from 'time' to 'times'
+const TimeModel = require('../models/times');
+
+exports.listarTimes = async (req, res) => {
+    try {
+        const times = await TimeModel.findAll();
+
+        // Se for uma chamada API, retorna JSON
+        if (req && (req.xhr || req.headers?.accept?.includes('application/json'))) {
+            return res.status(200).json(times);
+        }
+
+        // Se não for API, retorna os dados para renderização
+        return times;
+
+    } catch (error) {
+        console.error('Erro ao listar times:', error);
+        if (req && res) {
+            return res.status(500).json({ error: error.message });
+        }
+        throw error;
+    }
+};
 
 exports.criarTime = async (req, res) => {
-  const { name_teams } = req.body;
+    try {
+        const { name_teams, description } = req.body;
+        
+        // Validação básica
+        if (!name_teams || name_teams.trim() === '') {
+            return res.status(400).render('novo-time', {
+                error: 'Nome do time é obrigatório',
+                title: 'Criar Novo Time'
+            });
+        }
 
-  const query = `
-    INSERT INTO teams (name_teams)
-    VALUES ($1)
-    RETURNING *`;
-  const values = [name_teams];
+        const time = await TimeModel.criar({ name_teams, description });
 
-  try {
-    const result = await pool.query(query, values);
-    const time = result.rows[0];
-    res.status(201).json(time);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+        // Se for requisição AJAX/API
+        if (req.xhr || req.headers.accept?.includes('application/json')) {
+            return res.status(201).json({
+                success: true,
+                message: 'Time criado com sucesso',
+                time
+            });
+        }
+
+        // Se for submissão de formulário, redireciona
+        res.redirect('/kanban');
+    } catch (error) {
+        console.error('Erro ao criar time:', error);
+        res.status(500).render('novo-time', {
+            error: 'Erro ao criar time',
+            title: 'Criar Novo Time'
+        });
+    }
 };
 
-// Listar todas as tarefas
-exports.listarTime = async (req, res) => {
-  try {
-    const time = await TimeModel.findAll();
-    res.status(200).json(time);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// Editar uma tarefa
 exports.editarTime = async (req, res) => {
-  const { id } = req.params;
-  const { name_teams } = req.body;
-
-  const query = `
-    UPDATE teams 
-    SET name_teams = $1  /* Removed extra comma */
-    WHERE id = $2
-    RETURNING *`;
-  const values = [name_teams, id];
-
-  try {
-    const result = await pool.query(query, values);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Time não encontrado' });
+    try {
+        const { id } = req.params;
+        const time = await TimeModel.atualizar(id, req.body);
+        res.json(time);
+    } catch (error) {
+        console.error('Erro ao editar time:', error);
+        res.status(500).json({ error: error.message });
     }
-    res.status(200).json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 };
 
-// Excluir uma tarefa
 exports.excluirTime = async (req, res) => {
-  const { id } = req.params;
-
-  const query = 'DELETE FROM teams WHERE id = $1 RETURNING *';
-  const values = [id];
-
-  try {
-    const result = await pool.query(query, values);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Time não encontrado' });
+    try {
+        const { id } = req.params;
+        await TimeModel.delete(id);
+        res.status(204).send();
+    } catch (error) {
+        console.error('Erro ao excluir time:', error);
+        res.status(500).json({ error: error.message });
     }
-    res.status(200).json({ message: 'Time excluído com sucesso' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 };

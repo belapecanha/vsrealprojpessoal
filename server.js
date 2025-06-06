@@ -39,7 +39,7 @@ app.use(session({
 // Rotas
 app.use('/api', tarefasRoutes);
 app.use('/api', usuarioRoutes);
-app.use('/api', projetosRoutes);
+app.use('/', projetosRoutes);
 app.use('/api', timesRoutes);
 app.use('/api', timesProjetosRoutes);
 app.use('/api', labelsRoutes);

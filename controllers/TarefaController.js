@@ -9,11 +9,14 @@ exports.criarTarefa = async (req, res) => {
     // if (!req.session.userId) {
     //   throw new Error('Usuário não autenticado');
     // }
+
+    console.log('Dados recebidos para criar tarefa:', req.body);
+    console.log('ID do usuário na sessão:', req.session.userId);
     const dados = {
       ...req.body,
       user_id: req.session.userId 
     };
-    
+
     const tarefa = await TarefaService.criarTarefa(dados);
 
     if (req.xhr || req.headers.accept?.includes('application/json')) {
@@ -47,7 +50,6 @@ exports.listarTarefas = async (req, res) => {
 
 exports.editarTarefa = async (req, res) => {
   try {
-    // Descomente se autenticação for necessária
     // if (!req.session.userId) {
     //   throw new Error('Usuário não autenticado');
     // }
