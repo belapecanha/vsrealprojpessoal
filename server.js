@@ -42,7 +42,6 @@ app.use(session({
 
 // Rotas
 
-app.use('/api', tarefasRoutes);
 app.use('/api', usuarioRoutes);
 app.use('/', projetosRoutes);
 app.use('/api', timesRoutes);
@@ -51,6 +50,7 @@ app.use('/api', labelsRoutes);
 app.use('/api', labelsTasksRoutes);
 app.use('/auth', authRoutes);
 app.use('/', frontendRoutes);
+app.use('/', tarefasRoutes);
 
 
 // Rota raiz

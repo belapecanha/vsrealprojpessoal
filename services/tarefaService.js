@@ -49,26 +49,13 @@ class TarefaService {
   }
 
   static async atualizarTarefa(id, dados) {
-    const tarefa = await TarefaModel.buscarPorId(id);
-    if (!tarefa) {
-      throw new Error('Tarefa não encontrada');
+    try {
+        return await TarefaModel.atualizar(id, dados);
+    } catch (error) {
+        console.error('Erro ao atualizar tarefa:', error);
+        throw error;
     }
-    if (dados.user_id && tarefa.user_id !== parseInt(dados.user_id)) {
-      throw new Error('Sem permissão para atualizar esta tarefa');
-    }
-
-    return await TarefaModel.atualizar(id, {
-      title_tasks: dados.title_tasks,
-      description_tasks: dados.description_tasks,
-      status: dados.status,
-      priority: dados.priority,
-      user_id: dados.user_id,
-      team_id: dados.team_id,
-      project_id: dados.project_id,
-      label_id: dados.label_id,
-      deadline: dados.deadline
-    });
-  }
+}
 
   static async excluirTarefa(id, userId) {
     const tarefa = await TarefaModel.buscarPorId(id);

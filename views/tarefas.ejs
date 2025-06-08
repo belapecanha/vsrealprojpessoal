@@ -22,6 +22,7 @@
                 </button>
             </nav>
         </div>
+        
     </header>
 
     <!-- Conteúdo Principal -->
@@ -45,17 +46,13 @@
                         <% tarefas.filter(t => t.status === 'Pendente').forEach(tarefas => { %>
                         <div class="task-card">
                             <h4><%= tarefas.title_tasks %></h4>
-                            <p><%= tarefas.description_tasks %></p>
                             <div class="task-actions">
                                 <button onclick="window.location.href='/tarefa/editar/<%= tarefas.id %>'"class="btn-edit">
                                     <i class="fas fa-edit"></i> Editar
                                 </button>
-                            <button onclick="marcarFazendo('<%= tarefas.id %>')"class="btn-complete">
-                                <i class="fas fa-check"></i> Em andamento
-                            </button>
-                            <button onclick="marcarConcluida('<%= tarefas.id %>')"class="btn-complete">
-                                <i class="fas fa-check"></i> Concluir
-                            </button>
+                                <button onclick="window.location.href='/tarefas/view/<%= tarefas.id %>'"class="btn-edit">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Visualizar
+                                </button>
                             </div>
                         </div>
                     <% }) %>
@@ -70,7 +67,14 @@
                     <% tarefas.filter(t => t.status === 'Em andamento').forEach(tarefas => { %>
                     <div class="task-card">
                         <h4><%= tarefas.title_tasks %></h4>
-                        <p><%= tarefas.description_tasks %></p>
+                            <div class="task-actions">
+                                <button onclick="window.location.href='/tarefa/editar/<%= tarefas.id %>'"class="btn-edit">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button onclick="window.location.href='/tarefas/view/<%= tarefas.id %>'"class="btn-edit">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Visualizar
+                                </button>
+                            </div>
                     </div>
                     <% }) %>
                 </div>
@@ -86,7 +90,14 @@
                     <% tarefas.filter(t => t.status === 'Concluída').forEach(tarefas => { %>
                     <div class="task-card">
                         <h4><%= tarefas.title_tasks %></h4>
-                        <p><%= tarefas.description_tasks %></p>
+                            <div class="task-actions">
+                                <button onclick="window.location.href='/tarefa/editar/<%= tarefas.id %>'"class="btn-edit">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button onclick="window.location.href='/tarefas/view/<%= tarefas.id %>'"class="btn-edit">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Visualizar
+                                </button>
+                            </div>
                     </div>
                     <% }) %>
                 </div>

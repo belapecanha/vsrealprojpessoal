@@ -52,41 +52,29 @@ exports.listarTarefas = async (req, res) => {
 };
 
 exports.editarTarefa = async (req, res) => {
-  try {
-    // if (!req.session.userId) {
-    //   throw new Error('Usuário não autenticado');
-    // }
+    try {
+        const { id } = req.params;
+        const updateData = {
+            title_tasks: req.body.title_tasks,
+            description_tasks: req.body.description_tasks,
+            status: req.body.status,
+            priority: req.body.priority,
+            team_id: req.body.team_id || null,
+            project_id: req.body.project_id || null
+        };
 
-    const dados = {
-      title_tasks: req.body.title_tasks,
-      description_tasks: req.body.description_tasks,
-      status: req.body.status,
-      priority: req.body.priority,
-      user_id: req.session.userId,
-      team_id: req.body.team_id,
-      project_id: req.body.project_id,
-      label_id: req.body.label_id,
-      deadline: req.body.deadline
-    };
+        const tarefa = await TarefaService.atualizarTarefa(id, updateData);
 
-    const tarefa = await TarefaService.atualizarTarefa(req.params.id, dados);
-    if (req.xhr || req.headers.accept?.includes('application/json')) {
-      return res.status(200).json(tarefa);
+        return res.status(200).json({
+            success: true,
+            message: 'Tarefa atualizada com sucesso',
+            data: tarefa
+        });
+
+    } catch (error) {
+        console.error('Erro ao editar tarefa:', error);
+        return res.status(500).json({ error: error.message });
     }
-    res.redirect('/kanban');
-
-  } catch (err) {
-    console.error('Erro ao atualizar tarefa:', err);
-    const projetos = await ProjetoModel.findAll();
-    const times = await TimeModel.findAll();
-    res.status(500).render('editar-tarefa', {
-      title: 'Editar Tarefa',
-      tarefa: req.body,
-      projetos,
-      times,
-      error: err.message
-    });
-  }
 };
 
 exports.excluirTarefa = async (req, res) => {
@@ -157,5 +145,28 @@ exports.viewEditar = async (req, res) => {
       error: error.message
     });
   }
+};
+
+exports.viewTarefa = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tarefa = await TarefaService.buscarPorId(id);
+        
+        if (!tarefa) {
+            return res.status(404).render('error', {
+                error: 'Tarefa não encontrada'
+            });
+        }
+
+        res.render('visualizacao-tarefa', {
+            tarefa,
+            title: 'Visualizacao Tarefa'
+        });
+    } catch (error) {
+        console.error('Erro ao visualizar tarefa:', error);
+        res.status(500).render('error', {
+            error: 'Erro ao carregar tarefa'
+        });
+    }
 };
 

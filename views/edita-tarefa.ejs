@@ -27,7 +27,7 @@
     <main class="main">
 
         <section class="formulario">
-            <form action="/tarefas/edit/<%= tarefa.id %>" method="PUT">
+            <form id="editForm" action="/api/tarefas/edit/<%= tarefa.id %>" method="POST">
             <div class="form-container">
             <nav class="breadcrumb">
                 <a href="/kanban"><i class="fas fa-columns"></i> Kanban</a>
@@ -126,5 +126,41 @@
             <p>© 2025 Trackzo. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <script>
+document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {};
+    
+    // Convert FormData to JSON object
+    formData.forEach((value, key) => {
+        // Convert empty strings to null for optional fields
+        data[key] = value === '' ? null : value;
+    });
+
+    fetch(`/api/tarefas/edit/<%= tarefa.id %>`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = '/kanban';
+        } else {
+            return response.json().then(err => {
+                throw new Error(err.error || 'Erro ao atualizar tarefa');
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert(error.message);
+    });
+});
+</script>
 </body>
 </html>

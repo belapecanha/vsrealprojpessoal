@@ -19,14 +19,16 @@ Content-Type: application/json
 }
 
 ### editar task
-PUT http://localhost:3000/api/tarefas/edit/8
+PUT http://localhost:3000/api/tarefas/edit/2
 Content-Type: application/json
 
 {
-  "title_tasks": "Tarefa Atualizada5",
-  "description_tasks": "Nova descrição",
-  "status": "Em andamento",
-  "priority": "Alta"
+    "title_tasks": "Tarefa Atualizada56",
+    "description_tasks": "Nova descrição",
+    "status": "Em andamento",
+    "priority": "Alta",
+    "team_id": 12,
+    "project_id": 10
 }
 
 ### deletar task

@@ -13,12 +13,17 @@ class UsuarioModel {
     }
 
     static async buscarPorEmail(email) {
-        const query = `
-          SELECT * FROM users 
-          WHERE email = $1
-        `;
-        const result = await pool.query(query, [email]);
-        return result.rows[0] || null;
+        const client = await pool.connect();
+        try {
+            const query = 'SELECT * FROM users WHERE email = $1';
+            const result = await client.query(query, [email]);
+            return result.rows[0];
+        } catch (error) {
+            console.error('Erro ao buscar usuário:', error);
+            throw error;
+        } finally {
+            client.release();
+        }
     }
 
 
