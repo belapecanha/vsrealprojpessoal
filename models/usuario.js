@@ -33,13 +33,12 @@ class UsuarioModel {
 
     static async create(data) {
         const { name_users, email, password } = data;
-        const hashedPassword = await bcrypt.hash(password, 10);
         const query = `
           INSERT INTO users (name_users, email, password)
           VALUES ($1, $2, $3)
           RETURNING *
         `;
-        const result = await pool.query(query, [name_users, email, hashedPassword]);
+        const result = await pool.query(query, [name_users, email, password]);
         return result.rows[0];
     }
 

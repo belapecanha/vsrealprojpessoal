@@ -15,7 +15,9 @@ class AuthController {
     static async cadastrar(req, res) {
         try {
             const { name_users, email, password } = req.body;
-            
+            console.log('Registration attempt:', { email, passwordProvided: !!password });
+
+            // Validate input
             if (!name_users || !email || !password) {
 
                 return res.render('cadastro', {
@@ -37,16 +39,13 @@ class AuthController {
                 });
             }
 
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-            
-            // Debug log
-            console.log('Registering user:', {
-                email,
-                passwordLength: password.length,
-                hashedPasswordLength: hashedPassword.length
+            // Convert password to string and hash
+            const hashedPassword = await bcrypt.hash(String(password), 10);
+            console.log('Password hashed:', {
+                originalLength: password.length,
+                hashedLength: hashedPassword.length
             });
-
+            
             await Usuario.create({ name_users, email, password: hashedPassword });
             
             res.redirect('/auth/login');
@@ -62,50 +61,41 @@ class AuthController {
     static async login(req, res) {
         try {
             const { email, password } = req.body;
-            
-            // Debug log
-            console.log('Login attempt:', { email });
+            console.log('Login attempt:', { email, passwordProvided: !!password });
 
             const usuario = await Usuario.buscarPorEmail(email);
             if (!usuario) {
-                console.log('User not found:', email);
-                return res.status(401).render('login', {
-                    error: 'Email ou senha incorretos'
-                });
+                console.log('No user found with email:', email);
+                return res.render('login', { error: 'Email ou senha incorretos' });
             }
 
-            // Debug log
-            console.log('Stored password hash:', usuario.password);
-            console.log('Provided password:', password);
+            // Debug password comparison
+            console.log('Password comparison:', {
+                providedPasswordLength: password?.length,
+                storedHashLength: usuario.password?.length,
+                storedHashStart: usuario.password?.substring(0, 10) + '...'
+            });
 
-            // Use try-catch for bcrypt compare
-            try {
-                const senhaValida = await bcrypt.compare(password, usuario.password);
-                console.log('Password validation result:', senhaValida);
-
-                if (!senhaValida) {
-                    return res.status(401).render('login', {
-                        error: 'Email ou senha incorretos'
-                    });
-                }
-
-                // Set session
-                req.session.userId = usuario.id;
-                req.session.userEmail = usuario.email;
-                
-                return res.redirect('/kanban');
-            } catch (bcryptError) {
-                console.error('bcrypt comparison error:', bcryptError);
-                return res.status(500).render('login', {
-                    error: 'Erro na validação da senha'
-                });
+            // Ensure password and hash exist
+            if (!password || !usuario.password) {
+                console.log('Missing password or hash');
+                return res.render('login', { error: 'Email ou senha incorretos' });
             }
+
+            const senhaValida = await bcrypt.compare(String(password), usuario.password);
+            console.log('Password valid:', senhaValida);
+
+            if (!senhaValida) {
+                return res.render('login', { error: 'Email ou senha incorretos' });
+            }
+
+            req.session.userId = usuario.id;
+            req.session.userEmail = usuario.email;
+            res.redirect('/kanban');
 
         } catch (error) {
             console.error('Login error:', error);
-            res.status(500).render('login', {
-                error: 'Erro interno do servidor'
-            });
+            res.render('login', { error: 'Erro ao fazer login' });
         }
     }
 

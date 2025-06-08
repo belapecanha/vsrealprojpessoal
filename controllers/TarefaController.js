@@ -78,21 +78,32 @@ exports.editarTarefa = async (req, res) => {
 };
 
 exports.excluirTarefa = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const tarefa = await TarefaService.excluirTarefa(id, req.session.userId);
+    try {
+        const { id } = req.params;
+        await TarefaModel.delete(id);
 
-    if (!tarefa) {
-      return res.status(404).json({ message: 'Tarefa não encontrada' });
+        // Handle API requests
+        if (req.xhr || req.headers.accept?.includes('application/json')) {
+            return res.status(200).json({
+                success: true,
+                message: 'Tarefa excluída com sucesso'
+            });
+        }
+
+        // Handle browser requests
+        res.redirect('/kanban');
+
+    } catch (error) {
+        console.error('Erro ao excluir tarefa:', error);
+        
+        // Handle API requests
+        if (req.xhr || req.headers.accept?.includes('application/json')) {
+            return res.status(500).json({ error: error.message });
+        }
+
+        // Handle browser requests
+        res.status(500).render('error', { error: 'Erro ao excluir tarefa' });
     }
-    if (req.xhr || req.headers.accept?.includes('application/json')) {
-      return res.status(200).json({ message: 'Tarefa excluída com sucesso' });
-    }
-    res.redirect('/kanban');
-  } catch (err) {
-    console.error('Erro ao excluir tarefa:', err);
-    res.status(500).json({ error: err.message });
-  }
 };
 
 exports.viewTarefas = async (req, res) => {

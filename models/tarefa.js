@@ -206,6 +206,37 @@ class TarefaModel {
     const resultado = await pool.query(query, [id]);
     return resultado.rows[0];
   }
+
+  static async delete(id) {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+
+        // Then soft delete the task itself
+        const query = `
+            UPDATE tasks 
+            SET is_deleted = TRUE, 
+                updated_at = CURRENT_TIMESTAMP 
+            WHERE id = $1 AND is_deleted = FALSE 
+            RETURNING *
+        `;
+        
+        const result = await client.query(query, [id]);
+        
+        if (result.rows.length === 0) {
+            throw new Error('Tarefa não encontrada');
+        }
+
+        await client.query('COMMIT');
+        return result.rows[0];
+        
+    } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+    } finally {
+        client.release();
+    }
+  }
 }
 
 

@@ -18,7 +18,7 @@
             </div>
             <nav class="nav">
                 <button onclick="window.location.href='/tarefa/nova'" class="btn-nv">
-                <i class="fas fa-plus-circle"></i> Nova Tarefa
+                <i class="fa-solid fa-user"></i> Nova Tarefa
                 </button>
             </nav>
         </div>
@@ -53,6 +53,10 @@
                                 <button onclick="window.location.href='/tarefas/view/<%= tarefas.id %>'"class="btn-edit">
                                     <i class="fa-solid fa-magnifying-glass"></i> Visualizar
                                 </button>
+                                </button>
+                                <button onclick="window.location.href='tarefas/delete/<%= tarefas.id %>'"class="btn-edit">
+                                    <i class="fa-solid fa-trash"></i> Deletar
+                                </button>
                             </div>
                         </div>
                     <% }) %>
@@ -73,6 +77,10 @@
                                 </button>
                                 <button onclick="window.location.href='/tarefas/view/<%= tarefas.id %>'"class="btn-edit">
                                     <i class="fa-solid fa-magnifying-glass"></i> Visualizar
+                                </button>
+                                </button>
+                                <button onclick="window.location.href='tarefas/delete/<%= tarefas.id %>'"class="btn-edit">
+                                    <i class="fa-solid fa-trash"></i> Deletar
                                 </button>
                             </div>
                     </div>
@@ -97,6 +105,9 @@
                                 <button onclick="window.location.href='/tarefas/view/<%= tarefas.id %>'"class="btn-edit">
                                     <i class="fa-solid fa-magnifying-glass"></i> Visualizar
                                 </button>
+                                <button onclick="window.location.href='tarefas/delete/<%= tarefas.id %>'"class="btn-edit">
+                                    <i class="fa-solid fa-trash"></i> Deletar
+                                </button>
                             </div>
                     </div>
                     <% }) %>
@@ -115,52 +126,6 @@
                 contadorEmAndamento.textContent = document.querySelectorAll('#emandamento .task-card').length;
                 contadorConcluida.textContent = document.querySelectorAll('#concluido-tarefas .task-card').length;
             });
-
-            // Função para marcar tarefa como concluída
-            function marcarConcluida(id) {
-                fetch(`/api/tarefas/edit/${id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        status: 'Concluída'
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        throw new Error('Erro ao atualizar tarefa');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Erro ao marcar tarefa como concluída');
-                });
-            }
-            function marcarFazendo(id) {
-                fetch(`/api/tarefas/edit/${id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        status: 'Em andamento'
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        throw new Error('Erro ao atualizar tarefa');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Erro ao marcar tarefa como em andamento');
-                });
-            }
         </script>    
 </main>
 
