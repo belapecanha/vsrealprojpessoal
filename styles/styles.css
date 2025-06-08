@@ -138,6 +138,23 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.page-header2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: slideIn 0.5s ease;
+  padding: 1rem;
+}
+
+.page-header2 h2 {
+  font-size: 50px;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+.page-header2 p {
+  font-size: 18px;
+  color: #ffffff;
+}
+
 .page-header p {
   font-size: 18px;
   color: #000000;
