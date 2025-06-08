@@ -191,21 +191,28 @@ class TarefaModel {
     }
   }
   static async buscarPorId(id) {
-    const query = `
-      SELECT 
-        t.*,
-        u.name_users,
-        tm.name_teams,
-        p.name_projects
-      FROM tasks t
-      LEFT JOIN users u ON t.user_id = u.id
-      LEFT JOIN teams tm ON t.team_id = tm.id
-      LEFT JOIN projects p ON t.project_id = p.id
-      WHERE t.id = $1 AND t.is_deleted = FALSE`;
-
-    const resultado = await pool.query(query, [id]);
-    return resultado.rows[0];
-  }
+    const client = await pool.connect();
+    try {
+        const query = `
+            SELECT 
+                t.*,
+                p.name_projects as project_name,
+                tm.name_teams as team_name
+            FROM tasks t
+            LEFT JOIN projects p ON t.project_id = p.id
+            LEFT JOIN teams tm ON t.team_id = tm.id
+            WHERE t.id = $1 AND t.is_deleted = FALSE
+        `;
+        
+        const result = await client.query(query, [id]);
+        return result.rows[0];
+    } catch (error) {
+        console.error('Erro ao buscar tarefa:', error);
+        throw error;
+    } finally {
+        client.release();
+    }
+}
 
   static async delete(id) {
     const client = await pool.connect();

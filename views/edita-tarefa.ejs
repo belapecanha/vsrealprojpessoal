@@ -49,11 +49,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="deadline">Prazo</label>
-                    <input type="date" id="deadline" name="deadline" value="<%= tarefa.deadline ? new Date(tarefa.deadline).toISOString().split('T')[0] : '' %>">
-                </div>
-
-                <div class="form-group">
                     <label for="status">Status Inicial</label>
                     <select id="status" name="status" required>
                         <option value="" <%= !tarefa.status ? 'selected' : '' %>>Selecione o status</option>
