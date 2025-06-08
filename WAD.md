@@ -209,7 +209,61 @@ O projeto possui os seguintes endpoints:
 * DELETE → `/api/times-projetos/:time_id/:projeto_id` → Remove vínculo time-projeto
 
 ### 3.7 Interface e Navegação (Semana 07)
+O design do site teve como objetivo mostrar algo pratico, mas mantendo um aspecto jovem. Por ser um organizador de tarefas o site foi proejetado para manter um design mais clean, com o bjetivo de o manter funcional e intuitivo. As cores foram escolhidas pensando nesse aspécto, o rosa remete a juventude, em quanto o roxo a criatividade e intução, reforçando então a proposta. Em termos de código foi utilizado css puro, com uma biblioteca de icones para uma estilização mais agradável. 
+
 Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.
+
+<h2 align = "center"> Tela de cadastro</h2>
+
+![Image](./assets/cadastro.png)
+
+<p align = "center"> Aqui os usuários poderão se cadastrar no site.</p><br>
+
+<h2 align = "center"> Tela de login</h2>
+
+![Image](./assets/login.png)
+
+<p align = "center"> Aqui os usuários poderão fazer seu login para acessar suas tarefas.</p><br>
+
+<h2 align = "center"> Kanban</h2>
+
+![Image](./assets/kanban1.png)
+![Image](./assets/kanban2.png)
+![Image](./assets/kanban3.png)
+
+<p align = "center"> Aqui o usuário poderá ver suas tarefas em uma organização estilo kanban, ele poderá também acessar as outras funcionalidades do site como: editar uma tarefa, visualiza-la, apaga-la e criar uma nova.</p><br>
+
+<h2 align = "center"> Nova tarefa</h2>
+
+![Image](./assets/novatarefa.png)
+
+<p align = "center"> Ao clicar no botão de nova tarefa na tela do kanban, o usuário será redirecionado para essa página onde ele poderá inserir as informações que desejar para a tarefa. No canto superior esquerdo podemos observar 3 botões um para ser redirecionado para a pagina de criar um novo time, um para ser redireciona para a pagina de criar u novo projeto e um para voltar ao kanban</p><br>
+
+<h2 align = "center"> Novo time</h2>
+
+![Image](./assets/novotime.png)
+
+<p align = "center"> Aqui os usuários poderão criar novos times que são podem posteriormente ser vinculados a tarefas.</p><br>
+
+<h2 align = "center"> Novo projeto</h2>
+
+![Image](./assets/novoprojeto.png)
+
+<p align = "center"> Aqui os usuários poderão criar novos projetos que podem posteriormente ser vinculados a tarefas.</p><br>
+
+<h2 align = "center"> Editar tarefa</h2>
+
+![Image](./assets/editartarefa.png)
+
+<p align = "center"> Ao cliacar no botão de editar tarefa logo abixo do card dela na tela do kanban o usuário será redirecionado para essa página onde poderá editar dados de uma tarefa já existente.</p><br>
+
+<h2 align = "center"> Visualização da tarefa</h2>
+
+![Image](./assets/visualizartarefa.png)
+
+<p align = "center"> Aqui os usuários poderão visualizar todas as informações de sua tarefa. A página pode ser acessada a apartir do clique no botão visualizar no canto inferior direito do card de uma tarefa</p><br>
+
+
 
 ## <a name="c3"></a>4. Desenvolvimento da Aplicação Web (Semana 8)
 ### 4.1 Demonstração do Sistema Web (Semana 8)
