@@ -12,9 +12,6 @@ const tarefasRoutes = require('./routes/tarefasRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const projetosRoutes = require('./routes/projetosRoutes');
 const timesRoutes = require('./routes/timesRoutes');
-const timesProjetosRoutes = require('./routes/timesProjetosRoutes');
-const labelsRoutes = require('./routes/labelsRoutes');
-const labelsTasksRoutes = require('./routes/labelsTasksRoutes');
 const authRoutes = require('./routes/authRoutes');
 const frontendRoutes = require('./routes/frontendRoutes');
 
@@ -45,9 +42,6 @@ app.use(session({
 app.use('/api', usuarioRoutes);
 app.use('/', projetosRoutes);
 app.use('/api', timesRoutes);
-app.use('/api', timesProjetosRoutes);
-app.use('/api', labelsRoutes);
-app.use('/api', labelsTasksRoutes);
 app.use('/auth', authRoutes);
 app.use('/', frontendRoutes);
 app.use('/', tarefasRoutes);

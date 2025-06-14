@@ -36,38 +36,6 @@ CREATE TABLE IF NOT EXISTS teams (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Team-Projects Table
-CREATE TABLE IF NOT EXISTS team_projects (
-  team_id INT NOT NULL,
-  project_id INT NOT NULL,
-  assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (team_id, project_id),
-  FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
-  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
-);
-
--- Create indexes
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_team_projects_team') THEN
-        CREATE INDEX idx_team_projects_team ON team_projects(team_id);
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_team_projects_project') THEN
-        CREATE INDEX idx_team_projects_project ON team_projects(project_id);
-    END IF;
-END$$;
-
--- Team Members Table
-CREATE TABLE IF NOT EXISTS team_members (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  team_id INT NOT NULL,
-  name_team_members VARCHAR(100) NOT NULL,
-  role_team_members VARCHAR(100) NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE
-);
-
 -- Tasks Table
 CREATE TABLE IF NOT EXISTS tasks (
   id SERIAL PRIMARY KEY,
@@ -84,31 +52,3 @@ CREATE TABLE IF NOT EXISTS tasks (
   FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE SET NULL,
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL
 );
-
--- Labels Table 
-CREATE TABLE IF NOT EXISTS labels (
-  id SERIAL PRIMARY KEY,
-  name_labels VARCHAR(200) NOT NULL,
-  color_labels VARCHAR(20) DEFAULT ('#898989'),
-  description_labels TEXT
-);
-
--- Task-Labels Table
-CREATE TABLE IF NOT EXISTS task_labels (
-  id SERIAL PRIMARY KEY,
-  task_id INT NOT NULL,
-  label_id INT NOT NULL,
-  FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
-  FOREIGN KEY (label_id) REFERENCES labels(id) ON DELETE CASCADE
-);
-
--- Create indexes 
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_task_labels_task') THEN
-        CREATE INDEX idx_task_labels_task ON task_labels(task_id);
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_task_labels_label') THEN
-        CREATE INDEX idx_task_labels_label ON task_labels(label_id);
-    END IF;
-END$$;

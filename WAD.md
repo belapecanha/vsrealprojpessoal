@@ -13,7 +13,7 @@ Isabela Rosati Peçanha
 
 <br>
 
-## <a name="c1"></a>1. Introdução (Semana 01)
+## <a name="c1"></a>1. Introdução 
 
 O sistema proposto consiste em uma aplicação web para gerenciamento de tarefas, desenvolvida com o objetivo de auxiliar usuários que possuem uma rotina intensa e múltiplas responsabilidades. A plataforma permitirá a criação e organização de tarefas, projetos, equipes, etiquetas e anexos, possibilitando também a categorização das atividades por prioridade e status (como pendente, em andamento e concluída), o que contribui diretamente para uma gestão mais eficiente do tempo e das demandas. A interface será projetada para ser simples, prática e intuitiva, garantindo facilidade de uso.
 
@@ -21,7 +21,7 @@ O sistema proposto consiste em uma aplicação web para gerenciamento de tarefas
 
 ## <a name="c3"></a>3. Projeto da Aplicação Web
 
-### 3.1. Modelagem do banco de dados  (Semana 3)
+### 3.1. Modelagem do banco de dados 
 Modelo relacional
 ![Modelo Relacional](./assets/modelorelacional-vsreal.png)
 
@@ -31,11 +31,19 @@ O modelo relacional é uma forma estruturada de organizar os dados de um banco p
 Modelo Físico
 ```SQL
 -- ENUM 
-CREATE TYPE task_status AS ENUM ('Pendente', 'Em andamento', 'Concluída');
-CREATE TYPE task_priority AS ENUM ('Baixa', 'Média', 'Alta');
+DO $$ 
+BEGIN 
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_status') THEN
+        CREATE TYPE task_status AS ENUM ('Pendente', 'Em andamento', 'Concluída');
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_priority') THEN
+        CREATE TYPE task_priority AS ENUM ('Baixa', 'Média', 'Alta');
+    END IF;
+END $$;
 
 -- Users Table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   name_users VARCHAR(100) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
@@ -44,7 +52,7 @@ CREATE TABLE users (
 );
 
 -- Projects Table
-CREATE TABLE projects (
+CREATE TABLE IF NOT EXISTS projects (
   id SERIAL PRIMARY KEY,
   name_projects VARCHAR(100) NOT NULL,
   description_projects TEXT,
@@ -52,39 +60,16 @@ CREATE TABLE projects (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
 -- Teams Table
-CREATE TABLE teams (
+CREATE TABLE IF NOT EXISTS teams (
   id SERIAL PRIMARY KEY,
   name_teams VARCHAR(100) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Team-Projects Table
-CREATE TABLE team_projects (
-  team_id INT NOT NULL,
-  project_id INT NOT NULL,
-  assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (team_id, project_id),
-  FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
-  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
-);
-
-CREATE INDEX idx_team_projects_team ON team_projects(team_id);
-CREATE INDEX idx_team_projects_project ON team_projects(project_id);
-
--- Team Members Table
-CREATE TABLE team_members (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  team_id INT NOT NULL,
-  name_team_members VARCHAR(100) NOT NULL,
-  role_team_members VARCHAR(100) NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE
-);
-
 -- Tasks Table
-CREATE TABLE tasks (
+CREATE TABLE IF NOT EXISTS tasks (
   id SERIAL PRIMARY KEY,
   title_tasks VARCHAR(225) NOT NULL,
   description_tasks TEXT,
@@ -99,40 +84,18 @@ CREATE TABLE tasks (
   FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE SET NULL,
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL
 );
-
--- Labels Table 
-CREATE TABLE labels (
-  id SERIAL PRIMARY KEY,
-  name_labels VARCHAR(200) NOT NULL,
-  color_labels VARCHAR(20) DEFAULT ('#898989'),
-  description_labels TEXT
-);
-
--- Task-Labels Table
-CREATE TABLE task_labels (
-  id SERIAL PRIMARY KEY,
-  task_id INT NOT NULL,
-  label_id INT NOT NULL,
-  FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
-  FOREIGN KEY (label_id) REFERENCES labels(id) ON DELETE CASCADE
-);
-
-CREATE INDEX idx_task_labels_task ON task_labels(task_id);
-CREATE INDEX idx_task_labels_label ON task_labels(label_id);
 ```
 O modelo físico é a etapa onde tudo aquilo que foi pensado no modelo lógico vira código e estrutura real dentro do banco de dados. Nele, definimos exatamente como as tabelas vão ser criadas, os tipos de dados de cada coluna, os índices, restrições e como os dados vão ser armazenados. É onde o banco começa a existir de fato, com comandos SQL que criam as tabelas e relações.
 
 
-### 3.1.1 BD e Models (Semana 5)
+### 3.1.1 BD e Models 
 No projeto, foram implementados diversos models para gerenciar as diferentes entidades do banco de dados. Cada model é responsável pela lógica de acesso aos dados e as regras de negócio específicas de cada entidade. Os models implementados no meu projeto são: <br>
 **tarefa** -> Responsável pelo gerenciamento das tarefas, ele possui métodos para validar as relações, criar, listar, editar e deletar tarefas.<br>
 **usuario** -> Responsável por gerenciar os usuários do sistema, ele possui métodos para criar, editar, deletar e listar os usuários.<br>
 **projeto** -> Responsável por controlar os projetos, ele possui métodos para listar, editar, atualizar e deletar projetos.<br>
 **time** -> Responsável pela administração dos times, ele possui métodos para listar, criar, atualizar e deletar times.<br>
-**label** -> Responsável por gerenciar as etiquetas do sistema com métodos para listar, criar, atualizar e remover etiquetas.<br>
-**timesprojetos e labelsTasks** -> Responsáveis por gerenciar as relações entre tasks - labels e times - projetos. Isso é necessário devido a terem uma relação N:N, ou seja, uma task pode ter várias labels e uma label pode pertencer a várias tasks, com o mesmo acontecendo entre times e projetos
 
-### 3.2. Arquitetura (Semana 5)
+### 3.2. Arquitetura
 ![Diagrama de arquitetura](./assets/Diagramadearq-vsreal.jpg)
 
 **Fluxo de Dados:**
@@ -162,7 +125,7 @@ No projeto, foram implementados diversos models para gerenciar as diferentes ent
 - **Rotas**: Define os endpoints
 - **Banco de Dados**: Armazena dados em tabelas relacionais
   
-### 3.6. WebAPI e endpoints (Semana 05)
+### 3.6. WebAPI e endpoints 
 
 O projeto possui os seguintes endpoints:
 
@@ -171,18 +134,6 @@ O projeto possui os seguintes endpoints:
 * POST → `/api/tarefas/criar` → Cria uma nova tarefa
 * PUT → `/api/tarefas/edit/:id` → Atualiza uma tarefa existente
 * DELETE → `/api/tarefas/delete/:id` → Remove uma tarefa 
-
-#### Etiquetas
-* GET → `/api/label` → Lista todas as etiquetas
-* POST → `/api/label/criar` → Cria uma nova etiqueta
-* PUT → `/api/label/edit/:id` → Atualiza uma etiqueta
-* DELETE → `/api/label/delete/:id` → Remove uma etiqueta
-
-#### Relação Tarefas-Etiquetas
-* GET → `/api/tasks-labels/task/:task_id` → Lista etiquetas de uma tarefa
-* GET → `/api/tasks-labels/label/:label_id` → Lista tarefas com uma etiqueta
-* POST → `/api/tasks-labels` → Atribui etiqueta à tarefa
-* DELETE → `/api/tasks-labels/:task_id/:label_id` → Remove etiqueta da tarefa
 
 #### Times
 * GET → `/api/times` → Lista todos os times
@@ -202,14 +153,8 @@ O projeto possui os seguintes endpoints:
 * PUT → `/api/usuarios/edit/:id` → Atualiza um usuário
 * DELETE → `/api/usuarios/delete/:id` → Remove um usuário
 
-#### Relação Times-Projetos
-* GET → `/api/times-projetos/time/:time_id` → Lista projetos de um time
-* GET → `/api/times-projetos/projeto/:projeto_id` → Lista times de um projeto
-* POST → `/api/times-projetos` → Vincula time a projeto
-* DELETE → `/api/times-projetos/:time_id/:projeto_id` → Remove vínculo time-projeto
-
-### 3.7 Interface e Navegação (Semana 07)
-O design do site teve como objetivo mostrar algo pratico, mas mantendo um aspecto jovem. Por ser um organizador de tarefas o site foi proejetado para manter um design mais clean, com o bjetivo de o manter funcional e intuitivo. As cores foram escolhidas pensando nesse aspécto, o rosa remete a juventude, em quanto o roxo a criatividade e intução, reforçando então a proposta. Em termos de código foi utilizado css puro, com uma biblioteca de icones para uma estilização mais agradável. 
+### 3.7 Interface e Navegação 
+O design do site teve como objetivo mostrar algo pratico, mas mantendo um aspecto jovem. Por ser um organizador de tarefas o site foi proejetado para manter um design mais clean, com o bjetivo de o manter funcional e intuitivo. As cores foram escolhidas pensando nesse aspécto, o rosa remete a juventude, em quanto o roxo a criatividade e intuição, reforçando então a proposta. Em termos de código foi utilizado css puro, com uma biblioteca de icones para uma estilização mais agradável. 
 
 Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.
 
@@ -263,15 +208,18 @@ Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando
 
 <p align = "center"> Aqui os usuários poderão visualizar todas as informações de sua tarefa. A página pode ser acessada a apartir do clique no botão visualizar no canto inferior direito do card de uma tarefa</p><br>
 
+## <a name="c3"></a>4. Desenvolvimento da Aplicação Web 
+### 4.1 Demonstração do Sistema Web 
+VIDEO: Insira o link do vídeo demonstrativo nesta seção 
 
-
-## <a name="c3"></a>4. Desenvolvimento da Aplicação Web (Semana 8)
-### 4.1 Demonstração do Sistema Web (Semana 8)
-VIDEO: Insira o link do vídeo demonstrativo nesta seção Descreva e ilustre aqui o desenvolvimento do sistema web completo, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.
-
-### 4.2 Conclusões e Trabalhos Futuros (Semana 8)
-Indique pontos fortes e pontos a melhorar de maneira geral. Relacione também quaisquer outras ideias que você tenha para melhorias futuras.
+### 4.2 Conclusões e Trabalhos Futuros 
+O projeto Trackzo apresenta uma arquitetura MVC bem estruturada, com clara separação de responsabilidades e organização de código por funcionalidade, facilitando manutenção e evolução. O sistema implementa autenticação com segurança de senhas via bcrypt, interface Kanban intuitiva e relacionamentos entre tarefas, projetos e times. Entre os pontos fortes destaca-se também o tratamento de erros com logging adequado. Contudo, há oportunidades de melhoria na implementação de validações mais rigorosas contra injeção SQL, desenvolvimento de testes automatizados e refatoração de código duplicado. Para o futuro, o sistema poderia ter  notificações para tarefas com prazo próximo, sistema de drag-and-drop para o kanban, tags personalizáveis e funcionalidades de anexos.
 
 ## <a name="c3"></a> 5. Referências
-Incluir as principais referências de seu projeto, para que o leitor possa consultar caso ele se interessar em aprofundar.
-
+Incluir as principais referências de seu projeto, para que o leitor possa consultar caso ele se interessar em aprofundar.<br>
+<a href="https://nodejs.org/en/docs/">Documentação Node.js</a>  
+<a href="https://expressjs.com/pt-br/">Documentação Express.js</a>  
+<a href="https://www.postgresql.org/docs/">Documentação PostgreSQL</a>  
+<a href="https://ejs.co/">Documentação EJS</a>  
+<a href="https://www.npmjs.com/package/bcrypt">Documentação bcrypt</a>  
+<a href="https://www.npmjs.com/package/express-session">Documentação Express Session</a>  
