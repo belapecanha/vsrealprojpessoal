@@ -45,7 +45,7 @@ class ProjetoModel {
     return resultado.rows[0];
   }
 
-  // Corrigido método delete para retornar o resultado
+  // deleta um projeto
   static async delete(id) {
     const query = `DELETE FROM projects WHERE id = $1 RETURNING *`;
     const result = await pool.query(query, [id]);

@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const timeController = require('../controllers/TimeController');
 
-// Update routes to match form actions
 router.get('/times', timeController.listarTimes);
 router.post('/time/criar', timeController.criarTime);
 router.put('/time/edit/:id', timeController.editarTime);

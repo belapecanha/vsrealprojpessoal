@@ -1,4 +1,3 @@
-// server.js (após correção)
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -7,7 +6,6 @@ const session = require('express-session');
 
 const TarefaModel = require('./models/tarefa');
 
-// Import all routes
 const tarefasRoutes = require('./routes/tarefasRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const projetosRoutes = require('./routes/projetosRoutes');
@@ -30,14 +28,12 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Configurar sessão
 app.use(session({
     secret: 'lala@2', 
     resave: false,
     saveUninitialized: false  
   }));
 
-// Rotas
 
 app.use('/api', usuarioRoutes);
 app.use('/', projetosRoutes);
@@ -47,7 +43,6 @@ app.use('/', frontendRoutes);
 app.use('/', tarefasRoutes);
 
 
-// Rota raiz
 app.get('/', (req, res) => {
     res.redirect('/auth/login');
 });

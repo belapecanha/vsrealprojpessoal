@@ -1,4 +1,3 @@
-// authController.js (após correção)
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcrypt'); 
 
@@ -17,7 +16,6 @@ class AuthController {
             const { name_users, email, password } = req.body;
             console.log('Registration attempt:', { email, passwordProvided: !!password });
 
-            // Validate input
             if (!name_users || !email || !password) {
 
                 return res.render('cadastro', {
@@ -32,14 +30,12 @@ class AuthController {
                 });
             }
 
-            // Validate password length
             if (password.length < 6) {
                 return res.status(400).render('cadastro', {
                     error: 'A senha deve ter pelo menos 6 caracteres'
                 });
             }
 
-            // Convert password to string and hash
             const hashedPassword = await bcrypt.hash(String(password), 10);
             console.log('Password hashed:', {
                 originalLength: password.length,
@@ -69,14 +65,12 @@ class AuthController {
                 return res.render('login', { error: 'Email ou senha incorretos' });
             }
 
-            // Debug password comparison
             console.log('Password comparison:', {
                 providedPasswordLength: password?.length,
                 storedHashLength: usuario.password?.length,
                 storedHashStart: usuario.password?.substring(0, 10) + '...'
             });
 
-            // Ensure password and hash exist
             if (!password || !usuario.password) {
                 console.log('Missing password or hash');
                 return res.render('login', { error: 'Email ou senha incorretos' });
@@ -106,7 +100,6 @@ class AuthController {
                 return res.status(500).json({ error: 'Erro ao fazer logout' });
             }
             
-            // Redirecionar para a página de login
             res.redirect('/login');
         });
     }

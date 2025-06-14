@@ -1,4 +1,3 @@
-// controllers/usuariosController.js
 const pool = require('../config/database');
 const UsuarioModel = require('../models/usuario');
 const bcrypt = require('bcrypt'); 
@@ -19,13 +18,11 @@ exports.criarUsuario = async (req, res) => {
     const { name_users, email, password } = req.body;
 
     try {
-        // Verificar se o email já existe
         const usuarioExistente = await UsuarioModel.buscarPorEmail(email);
         if (usuarioExistente) {
             return res.status(400).json({ error: 'Email já cadastrado' });
         }
 
-        // Criar usuário usando o modelo
         const usuario = await UsuarioModel.create({ name_users, email, password });
         res.status(201).json(usuario);
     } catch (err) {

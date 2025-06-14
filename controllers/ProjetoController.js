@@ -1,12 +1,12 @@
 const pool = require('../config/database');
 const ProjetoModel = require('../models/projetos');
 
+//cria projeto
 exports.criarProjeto = async (req, res) => {
   try {
     const { name_projects, description_projects, team_id } = req.body;
 
 
-    // Validação básica
     if (!name_projects || name_projects.trim() === '') {
       return res.status(400).json({ error: 'Nome do projeto é obrigatório' });
     }
@@ -17,7 +17,6 @@ exports.criarProjeto = async (req, res) => {
       team_id
     });
 
-    // Se for uma requisição AJAX/API, retorna JSON
     if (req.xhr || req.headers.accept?.includes('application/json')) {
       return res.status(201).json({ 
         success: true, 
@@ -26,7 +25,6 @@ exports.criarProjeto = async (req, res) => {
       });
     }
 
-    // Se for uma requisição normal do navegador, redireciona
     res.redirect('/kanban');
 
   } catch (err) {

@@ -5,10 +5,6 @@ const TimeModel = require('../models/times');
 
 exports.criarTarefa = async (req, res) => {
   try {
-    // Descomente se autenticação for necessária
-    // if (!req.session.userId) {
-    //   throw new Error('Usuário não autenticado');
-    // }
 
     console.log('Dados recebidos para criar tarefa:', req.body);
     console.log('ID do usuário na sessão:', req.session.userId);
@@ -82,7 +78,6 @@ exports.excluirTarefa = async (req, res) => {
         const { id } = req.params;
         await TarefaModel.delete(id);
 
-        // Handle API requests
         if (req.xhr || req.headers.accept?.includes('application/json')) {
             return res.status(200).json({
                 success: true,
@@ -90,18 +85,15 @@ exports.excluirTarefa = async (req, res) => {
             });
         }
 
-        // Handle browser requests
         res.redirect('/kanban');
 
     } catch (error) {
         console.error('Erro ao excluir tarefa:', error);
         
-        // Handle API requests
         if (req.xhr || req.headers.accept?.includes('application/json')) {
             return res.status(500).json({ error: error.message });
         }
 
-        // Handle browser requests
         res.status(500).render('error', { error: 'Erro ao excluir tarefa' });
     }
 };

@@ -5,7 +5,7 @@ const ProjetoController = require('../controllers/ProjetoController');
 const TimeController = require('../controllers/TimeController');
 const TarefaService = require('../services/tarefaService');
 
-// Rota principal - mostra o quadro Kanban
+// Rota Kanban
 router.get('/kanban', TarefaController.viewTarefas);
 
 // Rota para o formulário de nova tarefa

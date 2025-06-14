@@ -5,12 +5,10 @@ exports.listarTimes = async (req, res) => {
     try {
         const times = await TimeModel.findAll();
 
-        // Se for uma chamada API, retorna JSON
         if (req && (req.xhr || req.headers?.accept?.includes('application/json'))) {
             return res.status(200).json(times);
         }
 
-        // Se não for API, retorna os dados para renderização
         return times;
 
     } catch (error) {
@@ -26,7 +24,6 @@ exports.criarTime = async (req, res) => {
     try {
         const { name_teams, description } = req.body;
         
-        // Validação básica
         if (!name_teams || name_teams.trim() === '') {
             return res.status(400).render('novo-time', {
                 error: 'Nome do time é obrigatório',
@@ -36,7 +33,6 @@ exports.criarTime = async (req, res) => {
 
         const time = await TimeModel.criar({ name_teams, description });
 
-        // Se for requisição AJAX/API
         if (req.xhr || req.headers.accept?.includes('application/json')) {
             return res.status(201).json({
                 success: true,
@@ -45,7 +41,6 @@ exports.criarTime = async (req, res) => {
             });
         }
 
-        // Se for submissão de formulário, redireciona
         res.redirect('/kanban');
     } catch (error) {
         console.error('Erro ao criar time:', error);

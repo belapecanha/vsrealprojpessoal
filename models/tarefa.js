@@ -23,12 +23,7 @@ class TarefaModel {
         throw new Error('Projeto não encontrado');
       }
     }
-    if (label_id) {
-      const etiquetaExiste = await pool.query('SELECT id FROM labels WHERE id = $1', [label_id]);
-      if (etiquetaExiste.rows.length === 0) {
-        throw new Error('Etiqueta não encontrada');
-      }
-    }
+
   }
 
   // Criar uma nova tarefa
@@ -51,14 +46,11 @@ class TarefaModel {
 
       const sanitizedTeamId = team_id === '' ? null : team_id;
       const sanitizedProjectId = project_id === '' ? null : project_id;
-      const sanitizedLabelId = label_id === '' ? null : label_id;
-
       // Validar relações 
       await this.validarRelacoes(
         user_id, 
         sanitizedTeamId, 
         sanitizedProjectId, 
-        sanitizedLabelId
       );
 
       // Criar a tarefa
@@ -87,14 +79,6 @@ class TarefaModel {
 
       const resultadoTarefa = await client.query(queryTarefa, valores);
       const tarefa = resultadoTarefa.rows[0];
-
-
-      if (sanitizedLabelId) {
-        await client.query(
-          'INSERT INTO task_labels (task_id, label_id) VALUES ($1, $2)',
-          [tarefa.id, sanitizedLabelId]
-        );
-      }
 
       await client.query('COMMIT');
       return tarefa;
@@ -141,7 +125,6 @@ class TarefaModel {
     try {
         await client.query('BEGIN');
 
-        // Validate relationships if team_id or project_id are provided
         if (dados.team_id || dados.project_id) {
             await this.validarRelacoes(
                 dados.user_id,
@@ -219,7 +202,6 @@ class TarefaModel {
     try {
         await client.query('BEGIN');
 
-        // Then soft delete the task itself
         const query = `
             UPDATE tasks 
             SET is_deleted = TRUE, 

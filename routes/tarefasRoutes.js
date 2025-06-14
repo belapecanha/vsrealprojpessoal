@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const tarefaController = require('../controllers/TarefaController');
 
-// API Routes
 router.get('/api/tarefas', tarefaController.listarTarefas);
 router.post('/api/tarefas/criar', tarefaController.criarTarefa);
 router.put('/api/tarefas/edit/:id', tarefaController.editarTarefa);
