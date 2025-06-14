@@ -129,6 +129,11 @@ Aqui você poderá ver algumas telas da interface do site. Para ter acesso a tod
 <p align = "center">para visualizar a tela de novo projeto e novo time acesse o WAD</p><br>
 
 
+## Video demonstrativo
+<a href="https://www.loom.com/share/6133401aa57f45d2ae829e7b1265d300?sid=af9cc838-9f13-436d-a93d-5f54fbe4a370
+">Link do vídeo</a>  
+
+
 ## Como executar o projeto localmente
 1. Clone o repositório:
 git clone https://github.com/belapecanha/vsrealprojpessoal
@@ -137,7 +142,7 @@ cd vsrealprojpessoal
 2. Instale as dependências
 npm install
 
-3. Configure o banco de daos
+3. Configure o banco de dados
 crie um banco PostgreSQL
 DB_HOST= 
 DB_PORT=5432

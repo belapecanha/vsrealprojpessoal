@@ -210,7 +210,8 @@ Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando
 
 ## <a name="c3"></a>4. Desenvolvimento da Aplicação Web 
 ### 4.1 Demonstração do Sistema Web 
-VIDEO: Insira o link do vídeo demonstrativo nesta seção 
+VIDEO: <a href="https://www.loom.com/share/6133401aa57f45d2ae829e7b1265d300?sid=af9cc838-9f13-436d-a93d-5f54fbe4a370
+">Link do vídeo</a>  
 
 ### 4.2 Conclusões e Trabalhos Futuros 
 O projeto Trackzo apresenta uma arquitetura MVC bem estruturada, com clara separação de responsabilidades e organização de código por funcionalidade, facilitando manutenção e evolução. O sistema implementa autenticação com segurança de senhas via bcrypt, interface Kanban intuitiva e relacionamentos entre tarefas, projetos e times. Entre os pontos fortes destaca-se também o tratamento de erros com logging adequado. Contudo, há oportunidades de melhoria na implementação de validações mais rigorosas contra injeção SQL, desenvolvimento de testes automatizados e refatoração de código duplicado. Para o futuro, o sistema poderia ter  notificações para tarefas com prazo próximo, sistema de drag-and-drop para o kanban, tags personalizáveis e funcionalidades de anexos.
